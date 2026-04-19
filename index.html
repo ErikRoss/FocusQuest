@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0b1120" id="meta-theme-color">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>FocusQuest - RPG Tracker</title>
 
@@ -975,9 +976,18 @@
         const isCloudEnabled = firebaseConfig.apiKey !== "ВАШ_API_KEY" && firebaseConfig.apiKey !== "";
 
         const DEFAULT_STATE = { user: { level: 1, xp: 0, hp: 100, gold: 0, streak: 1, lastLogin: Date.now() }, inventory: { health: 0, focus: 0 }, activeBuff: null, projects: [], logs: [], earnings: [], activeSession: null, achievements: [], stats: { quests: 0, bosses: 0, potions: 0 }, lastUpdate: Date.now() };
-        let state = JSON.parse(localStorage.getItem('focusquest_v2')) || DEFAULT_STATE;
+
+        let state;
+        try {
+            state = JSON.parse(localStorage.getItem('focusquest_v2')) || DEFAULT_STATE;
+        } catch (e) {
+            console.error("Помилка читання збереження (можливо, дані були обрізані):", e);
+            state = DEFAULT_STATE; // Відновлюємо базовий стан, щоб уникнути крашу
+        }
+
         let timerInterval = null, currentView = 'active', projectFilters = {}, dragSrc = null, deleteTarget = null;
         let pendingCloudState = null;
+        let isSyncModalOpen = false; // Запобіжник від множинного виклику вікна синхронізації
 
         // --- ОПИСИ РІВНІВ ---
         const LEVEL_MESSAGES = {
@@ -1048,28 +1058,29 @@
                         docRef = db.collection("focusquest_users").doc(user.uid);
                         updateCloudUI("sync", "syncing", "text-blue-400 border-blue-500/50 hover:bg-slate-700");
 
-                        let linkedUid = localStorage.getItem('focusquest_linked_uid');
-
                         // Real-Time слухач бази даних (Справжня безшовна синхронізація)
                         docRef.onSnapshot({ includeMetadataChanges: true }, (doc) => {
                             if (doc.exists) {
                                 const cloudState = doc.data();
                                 const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
 
+                                // Читаємо актуальний статус ПРЯМО ТУТ, щоб не використовувати застарілу пам'ять
+                                const currentLinkedUid = localStorage.getItem('focusquest_linked_uid');
+
                                 // Якщо це перший вхід на цьому пристрої для цього юзера
-                                if (linkedUid !== user.uid) {
+                                if (currentLinkedUid !== user.uid) {
                                     const isLocalEmpty = state.user.xp === 0 && state.projects.length === 0;
 
                                     if (isLocalEmpty) {
                                         // Пристрій порожній - просто завантажуємо дані з хмари тихо
                                         localStorage.setItem('focusquest_linked_uid', user.uid);
-                                        linkedUid = user.uid;
                                         state = cloudState;
                                         localStorage.setItem('focusquest_v2', JSON.stringify(state));
                                         renderAll();
                                         updateCloudUI("check", "synced", "text-emerald-400 border-emerald-500/50");
-                                    } else {
-                                        // Є локальні дані - показуємо модалку ОДИН РАЗ
+                                    } else if (!isSyncModalOpen) {
+                                        // Є локальні дані - показуємо модалку ОДИН РАЗ, блокуємо повторні виклики
+                                        isSyncModalOpen = true;
                                         pendingCloudState = cloudState;
                                         document.getElementById('sync-modal-text').innerHTML = `${t('sync_modal_desc')}<br><br><span class="text-blue-400">☁️ ${t('cloud')}: LVL ${calculateLevel(cloudState.user.xp || 0).level}</span><br><span class="text-emerald-400">💻 ${t('local')}: LVL ${calculateLevel(state.user.xp || 0).level}</span>`;
                                         document.getElementById('sync-modal').style.display = 'flex';
@@ -1092,9 +1103,9 @@
                                 }
                             } else {
                                 // Новий акаунт, якого ще немає в базі - завантажуємо туди локальний прогрес
-                                if (linkedUid !== user.uid) {
+                                const currentLinkedUid = localStorage.getItem('focusquest_linked_uid');
+                                if (currentLinkedUid !== user.uid) {
                                     localStorage.setItem('focusquest_linked_uid', user.uid);
-                                    linkedUid = user.uid;
                                 }
                                 saveData();
                             }
@@ -1152,6 +1163,8 @@
         }
 
         function resolveSync(choice) {
+            isSyncModalOpen = false; // Скидаємо запобіжник
+
             // Запам'ятовуємо, що цей пристрій прив'язаний
             localStorage.setItem('focusquest_linked_uid', currentUser.uid);
 
