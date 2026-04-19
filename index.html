@@ -18,6 +18,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="env.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;600;700&display=swap');
@@ -591,9 +592,8 @@
         }
 
         // --- FIREBASE ТА СТАН ---
-        const firebaseConfig = { apiKey: "ВСТАВТЕ_ВАШ_API_KEY", authDomain: "ВСТАВТЕ_ВАШ_PROJECT.firebaseapp.com", projectId: "ВСТАВТЕ_ВАШ_PROJECT_ID" };
         let db = null, docRef = null, auth = null, currentUser = null;
-        const isCloudEnabled = firebaseConfig.apiKey !== "ВСТАВТЕ_ВАШ_API_KEY" && firebaseConfig.apiKey !== "";
+        const isCloudEnabled = firebaseConfig.apiKey !== "YOUR_API_KEY_HERE" && firebaseConfig.apiKey !== "";
 
         const DEFAULT_STATE = { user: { level: 1, xp: 0, hp: 100, gold: 0, streak: 1, lastLogin: Date.now() }, inventory: { health: 0, focus: 0 }, activeBuff: null, projects: [], logs: [], earnings: [], activeSession: null, achievements: [], stats: { quests: 0, bosses: 0, potions: 0 } };
         let state = JSON.parse(localStorage.getItem('focusquest_v2')) || DEFAULT_STATE;
