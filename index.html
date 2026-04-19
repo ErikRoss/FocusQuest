@@ -19,6 +19,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="env.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;600;700&display=swap');
@@ -970,11 +971,10 @@
         }
 
         // --- FIREBASE ТА СТАН ---
-        const firebaseConfig = { apiKey: "ВСТАВТЕ_ВАШ_API_KEY", authDomain: "ВСТАВТЕ_ВАШ_PROJECT.firebaseapp.com", projectId: "ВСТАВТЕ_ВАШ_PROJECT_ID" };
         let db = null, docRef = null, auth = null, currentUser = null;
-        const isCloudEnabled = firebaseConfig.apiKey !== "ВСТАВТЕ_ВАШ_API_KEY" && firebaseConfig.apiKey !== "";
+        const isCloudEnabled = firebaseConfig.apiKey !== "ВАШ_API_KEY" && firebaseConfig.apiKey !== "";
 
-        const DEFAULT_STATE = { user: { level: 1, xp: 0, hp: 100, gold: 0, streak: 1, lastLogin: Date.now() }, inventory: { health: 0, focus: 0 }, activeBuff: null, projects: [], logs: [], earnings: [], activeSession: null, achievements: [], stats: { quests: 0, bosses: 0, potions: 0 } };
+        const DEFAULT_STATE = { user: { level: 1, xp: 0, hp: 100, gold: 0, streak: 1, lastLogin: Date.now() }, inventory: { health: 0, focus: 0 }, activeBuff: null, projects: [], logs: [], earnings: [], activeSession: null, achievements: [], stats: { quests: 0, bosses: 0, potions: 0 }, lastUpdate: Date.now() };
         let state = JSON.parse(localStorage.getItem('focusquest_v2')) || DEFAULT_STATE;
         let timerInterval = null, currentView = 'active', projectFilters = {}, dragSrc = null, deleteTarget = null;
         let pendingCloudState = null;
@@ -1026,6 +1026,13 @@
             if (isCloudEnabled) {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
+
+                // Увімкнення офлайн-персистентності для розумної синхронізації без інтернету
+                db.enablePersistence().catch(err => {
+                    if (err.code == 'failed-precondition') console.log("Offline mode: Multiple tabs open.");
+                    else if (err.code == 'unimplemented') console.log("Offline mode: Browser not supported.");
+                });
+
                 auth = firebase.auth();
 
                 auth.onAuthStateChanged(async user => {
@@ -1041,29 +1048,63 @@
                         docRef = db.collection("focusquest_users").doc(user.uid);
                         updateCloudUI("sync", "syncing", "text-blue-400 border-blue-500/50 hover:bg-slate-700");
 
-                        try {
-                            const docSnap = await docRef.get();
-                            if (docSnap.exists) {
-                                const cloudState = docSnap.data();
-                                const isLocalEmpty = state.user.xp === 0 && state.projects.length === 0;
+                        let linkedUid = localStorage.getItem('focusquest_linked_uid');
 
-                                if (isLocalEmpty) {
-                                    state = cloudState;
-                                    localStorage.setItem('focusquest_v2', JSON.stringify(state));
-                                    renderAll();
-                                    updateCloudUI("check", "synced", "text-emerald-400 border-emerald-500/50 hover:bg-slate-700");
+                        // Real-Time слухач бази даних (Справжня безшовна синхронізація)
+                        docRef.onSnapshot({ includeMetadataChanges: true }, (doc) => {
+                            if (doc.exists) {
+                                const cloudState = doc.data();
+                                const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+
+                                // Якщо це перший вхід на цьому пристрої для цього юзера
+                                if (linkedUid !== user.uid) {
+                                    const isLocalEmpty = state.user.xp === 0 && state.projects.length === 0;
+
+                                    if (isLocalEmpty) {
+                                        // Пристрій порожній - просто завантажуємо дані з хмари тихо
+                                        localStorage.setItem('focusquest_linked_uid', user.uid);
+                                        linkedUid = user.uid;
+                                        state = cloudState;
+                                        localStorage.setItem('focusquest_v2', JSON.stringify(state));
+                                        renderAll();
+                                        updateCloudUI("check", "synced", "text-emerald-400 border-emerald-500/50");
+                                    } else {
+                                        // Є локальні дані - показуємо модалку ОДИН РАЗ
+                                        pendingCloudState = cloudState;
+                                        document.getElementById('sync-modal-text').innerHTML = `${t('sync_modal_desc')}<br><br><span class="text-blue-400">☁️ ${t('cloud')}: LVL ${calculateLevel(cloudState.user.xp || 0).level}</span><br><span class="text-emerald-400">💻 ${t('local')}: LVL ${calculateLevel(state.user.xp || 0).level}</span>`;
+                                        document.getElementById('sync-modal').style.display = 'flex';
+                                    }
+                                } else if (source === "Server") {
+                                    // Дані прийшли з іншого пристрою (наприклад, з телефона)
+                                    if ((cloudState.lastUpdate || 0) > (state.lastUpdate || 0)) {
+                                        // Зберігаємо поточний активний таймер, щоб не скинути його
+                                        const currentSession = state.activeSession;
+                                        state = cloudState;
+                                        if (currentSession) state.activeSession = currentSession;
+
+                                        localStorage.setItem('focusquest_v2', JSON.stringify(state));
+                                        renderAll();
+                                    }
+                                    updateCloudUI("check", "synced", "text-emerald-400 border-emerald-500/50");
                                 } else {
-                                    pendingCloudState = cloudState;
-                                    document.getElementById('sync-modal-text').innerHTML = `${t('sync_modal_desc')}<br><br><span class="text-blue-400">☁️ ${t('cloud')}: LVL ${calculateLevel(cloudState.user.xp).level}</span><br><span class="text-emerald-400">💻 ${t('local')}: LVL ${calculateLevel(state.user.xp).level}</span>`;
-                                    document.getElementById('sync-modal').style.display = 'flex';
+                                    // Зміни зроблені локально і збережені
+                                    updateCloudUI("check", "synced", "text-emerald-400 border-emerald-500/50");
                                 }
                             } else {
+                                // Новий акаунт, якого ще немає в базі - завантажуємо туди локальний прогрес
+                                if (linkedUid !== user.uid) {
+                                    localStorage.setItem('focusquest_linked_uid', user.uid);
+                                    linkedUid = user.uid;
+                                }
                                 saveData();
                             }
-                        } catch (e) {
+                        }, (error) => {
+                            console.error(error);
                             updateCloudUI("exclamation-triangle", "cloud_error", "text-red-400 border-red-500/50 hover:bg-slate-700");
-                        }
+                        });
+
                     } else {
+                        // Користувач вийшов з акаунта
                         authBtn.setAttribute('data-i18n-title', 'login_google'); authBtn.title = t('login_google');
                         authIcon.className = 'fab fa-google';
                         authBtn.classList.replace('text-red-400', 'text-blue-400');
@@ -1083,7 +1124,8 @@
                 if (p) { document.getElementById('timer-task-name').innerText = state.activeSession.name; document.getElementById('timer-project-name').innerText = `${t('project')}: ${p.name}`; document.getElementById('active-timer').classList.remove('hidden'); if (!timerInterval) timerInterval = setInterval(updateTimerDisplay, 1000); }
                 else { state.activeSession = null; }
             }
-            setInterval(saveData, 5000);
+            // Кожні 5 секунд зберігаємо прогрес ТІЛЬКИ якщо є активна сесія (для оптимізації Firestore)
+            setInterval(() => { if (state.activeSession) saveData(); }, 5000);
             setInterval(() => { if (state.activeBuff && Date.now() > state.activeBuff.expires) { state.activeBuff = null; renderAll(); } }, 60000);
         };
 
@@ -1110,23 +1152,26 @@
         }
 
         function resolveSync(choice) {
+            // Запам'ятовуємо, що цей пристрій прив'язаний
+            localStorage.setItem('focusquest_linked_uid', currentUser.uid);
+
             if (choice === 'cloud' && pendingCloudState) {
                 state = pendingCloudState;
-                localStorage.setItem('focusquest_v2', JSON.stringify(state));
-                renderAll();
-                updateCloudUI("check", "synced", "text-emerald-400 border-emerald-500/50 hover:bg-slate-700");
+                saveData(); // Перезаписуємо локал
             } else if (choice === 'local') {
-                saveData();
+                saveData(); // Примусово відправляємо локал в хмару
             }
             pendingCloudState = null;
             document.getElementById('sync-modal').style.display = 'none';
+            renderAll();
         }
 
         function saveData() {
+            state.lastUpdate = Date.now(); // Мітка часу для синхронізації
             localStorage.setItem('focusquest_v2', JSON.stringify(state));
+
             if (isCloudEnabled && currentUser && docRef) {
                 docRef.set(state)
-                    .then(() => updateCloudUI("check", "saved", "text-emerald-400 border-emerald-500/50 hover:bg-slate-700"))
                     .catch(() => updateCloudUI("wifi", "no_network", "text-yellow-400 border-yellow-500/50 hover:bg-slate-700"));
             }
         }
