@@ -483,7 +483,8 @@
             class="glass-card max-w-2xl w-full p-8 rounded-3xl animate-slide border border-orange-500/50 shadow-2xl text-white max-h-[85vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-orange-400 flex items-center"><i class="fas fa-trophy mr-3"></i>
-                    <span data-i18n="achievements_btn">Досягнення</span></h3>
+                    <span data-i18n="achievements_btn">Досягнення</span>
+                </h3>
                 <button onclick="closeAchievementsModal()" class="text-slate-400 hover:text-white transition"><i
                         class="fas fa-times text-xl"></i></button>
             </div>
@@ -673,6 +674,16 @@
                             (Хв)</label>
                         <input type="number" id="edit-est-minutes" min="0" max="59" value="0"
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition text-center font-mono text-white">
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold text-emerald-400 mb-1" data-i18n="actual_hours">Фактично (Год)</label>
+                        <input type="number" id="edit-time-hours" min="0" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 transition text-center font-mono text-white">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold text-emerald-400 mb-1" data-i18n="actual_minutes">Фактично (Хв)</label>
+                        <input type="number" id="edit-time-minutes" min="0" max="59" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 transition text-center font-mono text-white">
                     </div>
                 </div>
                 <div class="flex gap-3 pt-4">
@@ -933,7 +944,7 @@
                 need_api_key: "Будь ласка, додайте Firebase API Key у код для активації хмарної синхронізації.",
                 choose_class: "Виберіть свій шлях", class_warrior: "Воїн", class_warrior_desc: "Отримує на 50% менше шкоди (HP) від штрафів.", class_mage: "Маг", class_mage_desc: "Отримує на 15% більше досвіду (XP).", class_rogue: "Розбійник", class_rogue_desc: "Знаходить на 20% більше золота (🪙).", class_novice: "Новачок", select_btn: "Обрати",
                 level_up_title: "РІВЕНЬ ПІДВИЩЕНО!", continue_adv: "Продовжити пригоду",
-                discard_session: "Скасувати таймер (не зберігати)", save_session: "Зберегти час", session_summary: "Завершення фокусу", actual_time: "Фактичний час"
+                discard_session: "Скасувати таймер (не зберігати)", save_session: "Зберегти час", session_summary: "Завершення фокусу", actual_time: "Фактичний час", actual_hours: "Фактично (Год)", actual_minutes: "Фактично (Хв)"
             },
             en: {
                 offline: "Local Save", syncing: "Syncing...", synced: "Synced", new_profile: "New Profile", cloud_error: "Cloud Error", no_network: "Offline Mode", saved: "Saved", hero_name: "Focus Hero", health: "Health", experience: "Experience", gold: "Gold", xp_multiplier: "XP Multiplier", guild_shop: "Guild Shop", health_potion: "Health Potion", health_potion_desc: "+30 HP. Cures procrastination.", focus_potion: "Focus Potion", focus_potion_desc: "Double XP for 30 min.", inventory: "Your Inventory", real_earnings: "Real Earnings", today: "Today", week: "Week", total: "Total", adventure_log: "Adventure Log", active_quests: "Active Quests", your_worlds: "Your Worlds", active: "Active", completed: "Completed", new_world: "+ New World", empty_active: "No active projects. Start your journey!", empty_completed: "Archive is empty.", create_world_title: "Create New World", project_name: "Project Name", hourly_rate: "Hourly Rate (🪙/hr)", boss_battle: "Boss Battle?", boss_desc: "Project gets an HP bar.", cancel: "Cancel", create: "Create", add: "Add", save: "Save", got_it: "Got it", new_quest: "New Quest", what_to_do: "What needs to be done?", new_subtask: "New Step (Subtask)", what_exactly: "What exactly to do?", manual_time: "Enter Time", hours: "Hours", minutes: "Minutes", attention: "Attention", stop_penalty: "Stop under 5m: -10 HP", stop: "Stop", task: "Task", project: "Project", boss_hp: "Boss HP", rate: "Rate", time: "Time", quest: "Quest", restore: "Restore", err_time: "Please enter correct time.", err_gold: "Not enough gold!", silence: "Silence...", edit_title: "Edit", tasks: "Quests", active_only: "Active", all: "All", focus_finished: "Focus", save_changes: "Save", time_added: "Time added", delete: "Delete", confirm_delete: "Confirm Deletion", delete_project_msg: "Delete this world and all its quests?", delete_task_msg: "Delete this quest?", delete_subtask_msg: "Delete this step?", toggle_lang: "Change language", toggle_theme: "Toggle Dark/Light Mode", toggle_sound: "Toggle Sounds", cloud_status_tt: "Data sync status", view_active: "Show active worlds", view_completed: "Show completed worlds", add_project: "Create a new world (Project)", streak_tt: "Your daily focus streak. Grants XP bonus!", level_tt: "Your current level", hp_bar_tt: "Your health. Drops when you procrastinate", xp_bar_tt: "Your experience towards next level", gold_tt: "Current gold balance", multiplier_tt: "XP Bonus from streak and potions", timer_display_tt: "Focus time", earnings_today: "Earned today", earnings_week: "Earned this week", earnings_total: "Total earnings", shop_health: "Buy Health Potion", shop_focus: "Buy Focus Potion", use_health: "Drink potion (restores HP)", use_focus: "Drink potion (doubles XP)", cancel_action: "Cancel action", confirm_action: "Confirm", collapse: "Collapse / Expand", complete_project: "Complete world and move to archive", restore_project: "Restore world from archive", delete_project: "Delete this world", add_quest: "Add a new quest to this world", show_active_tasks: "Show only uncompleted quests", show_all_tasks: "Show all quests", drag_handle: "Drag to reorder", mark_done: "Mark as done / undone", edit: "Edit", manual_time_btn: "Log time manually", start_timer: "Start focus", stop_timer: "Stop focus", add_subtask: "Add subtask (step)", delete_task: "Delete this quest", delete_subtask: "Delete this step", export_csv: "Export report to CSV",
@@ -944,7 +955,7 @@
                 need_api_key: "Please add your Firebase API Key to the code to enable cloud sync.",
                 choose_class: "Choose your Path", class_warrior: "Warrior", class_warrior_desc: "Takes 50% less damage (HP) from penalties.", class_mage: "Mage", class_mage_desc: "Earns 15% more experience (XP).", class_rogue: "Rogue", class_rogue_desc: "Finds 20% more gold (🪙).", class_novice: "Novice", select_btn: "Select",
                 level_up_title: "LEVEL UP!", continue_adv: "Continue Adventure",
-                discard_session: "Discard timer (do not save)", save_session: "Save Time", session_summary: "Focus Completed", actual_time: "Actual time tracked"
+                discard_session: "Discard timer (do not save)", save_session: "Save Time", session_summary: "Focus Completed", actual_time: "Actual time tracked", actual_hours: "Actual (Hrs)", actual_minutes: "Actual (Mins)"
             }
         };
 
@@ -1577,17 +1588,19 @@
             document.getElementById('edit-tid').value = tid;
             document.getElementById('edit-stid').value = stid || '';
             const pr = state.projects.find(p => p.id === pid);
-            let title = '', estTime = 0;
+            let title = '', estTime = 0, actTime = 0;
             if (stid) {
                 const st = pr.tasks.find(t => t.id === tid).subtasks.find(s => s.id === stid);
-                title = st.title; estTime = st.estimatedTime || 0;
+                title = st.title; estTime = st.estimatedTime || 0; actTime = st.timeSpent || 0;
             } else {
                 const tk = pr.tasks.find(t => t.id === tid);
-                title = tk.title; estTime = tk.estimatedTime || 0;
+                title = tk.title; estTime = tk.estimatedTime || 0; actTime = tk.timeSpent || 0;
             }
             document.getElementById('edit-title-input').value = title;
             document.getElementById('edit-est-hours').value = Math.floor(estTime / 3600);
             document.getElementById('edit-est-minutes').value = Math.floor((estTime % 3600) / 60);
+            document.getElementById('edit-time-hours').value = Math.floor(actTime / 3600);
+            document.getElementById('edit-time-minutes').value = Math.floor((actTime % 3600) / 60);
             document.getElementById('edit-modal').style.display = 'flex';
             setTimeout(() => document.getElementById('edit-title-input').focus(), 50);
         }
@@ -1596,14 +1609,16 @@
             const pid = document.getElementById('edit-pid').value, tid = document.getElementById('edit-tid').value, stid = document.getElementById('edit-stid').value, newTitle = document.getElementById('edit-title-input').value;
             if (!newTitle) return;
             const estH = parseInt(document.getElementById('edit-est-hours').value) || 0, estM = parseInt(document.getElementById('edit-est-minutes').value) || 0;
+            const actH = parseInt(document.getElementById('edit-time-hours').value) || 0, actM = parseInt(document.getElementById('edit-time-minutes').value) || 0;
             const newEstTime = (estH * 3600) + (estM * 60);
+            const newActTime = (actH * 3600) + (actM * 60);
             const pr = state.projects.find(p => p.id === pid);
             if (stid) {
                 const st = pr.tasks.find(t => t.id === tid).subtasks.find(s => s.id === stid);
-                st.title = newTitle; st.estimatedTime = newEstTime;
+                st.title = newTitle; st.estimatedTime = newEstTime; st.timeSpent = newActTime;
             } else {
                 const tk = pr.tasks.find(t => t.id === tid);
-                tk.title = newTitle; tk.estimatedTime = newEstTime;
+                tk.title = newTitle; tk.estimatedTime = newEstTime; tk.timeSpent = newActTime;
             }
             closeEditModal(); saveData(); renderAll();
         }
