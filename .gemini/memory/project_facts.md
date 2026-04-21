@@ -15,7 +15,12 @@
 - **Tabbed Navigation**: 3-tab layout (Hero, Adventures, Stats) managed by `switchTab(tabId)`.
 - **Consistency**: All tabs (`#tab-hero`, `#tab-adventures`, `#tab-stats`) are top-level `.tab-content` sections with `space-y-6` for consistent vertical spacing.
 - **Hero Tab**:
-    - **Row 1 (Grid)**: Hero Panel (HP/XP/Gold) and Adventure Log (with settings/cloud status).
+    - **Row 1 (Grid)**: 
+        - **Hero Panel**: Displays Level, HP/XP bars, Gold/Multiplier. Features Achievements button (top-left) and Streaks (top-right).
+        - **Adventure Log**: Contains event logs and header with settings (Lang, Theme, Sound, Auth) and Cloud Status badge.
+    - **Adventure Log Layout**:
+        - **Desktop**: Title left, controls/status right in one row.
+        - **Mobile**: Row 1 (Controls/Status right), Row 2 (Title centered).
     - **Row 2**: Guild Shop (2 columns for items).
 - **Adventures Tab**: Task tracker with project/task/subtask management and active timer.
 - **Stats Tab**:
