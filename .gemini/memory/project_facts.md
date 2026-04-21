@@ -9,12 +9,17 @@
     - `mage`: +15% XP bonus.
     - `rogue`: +20% Gold bonus.
 - **Currencies**: Gold (🪙) and XP.
+- **Reporting**: `renderReport()` filters `state.logs` and `state.projects` based on datetime range.
 
 ## UI Components
-- **Hero Panel**: Displays Level, HP, XP, Gold, Streak.
-- **Active Timer**: Shows the current task being tracked.
-- **Shop**: Guild Shop for buying potions.
-- **Worlds/Quests**: Main task management area with Boss battle toggle.
+- **Tabbed Navigation**: 3-tab layout (Hero, Adventures, Stats) managed by `switchTab(tabId)`.
+- **Navigation State**: Active tab is persisted in `localStorage` under `focusquest_active_tab`.
+- **Hero Tab**: Character panel, HP/XP bars, inventory, shop, and logs.
+- **Adventures Tab**: Task tracker with project/task/subtask management and active timer.
+- **Stats Tab**:
+    - Dashboard with 6 counters (XP, Gold, Time, Quests, Bosses, Potions).
+    - Pure CSS Bar Charts for 7-day productivity and profitability.
+    - Advanced Report with Project and Datetime filtering + Filtered CSV Export.
 
 ## External Integrations
 - **Firebase**: Uses Compat version (v10.8.1). Integrated in `index.html`.
