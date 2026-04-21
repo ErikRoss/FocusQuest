@@ -12,16 +12,17 @@
 - **Reporting**: `renderReport()` filters `state.logs` and `state.projects` based on datetime range.
 
 ## UI Components
-- **Persistent Header**: `header#hero-section` contains Hero Panel, Shop, and Logs. It remains visible across all tabs.
-- **Responsive Header Layout**:
-    - **Desktop**: Grid (2 cols). Hero | Logs in first row, Shop (2 cols) in second row.
-    - **Mobile**: Flex-col. Order: Hero -> Shop -> Logs.
-- **Tabbed Navigation**: Bottom Nav toggles visibility of `#tab-adventures` and `#tab-stats` below the persistent header.
-- **Navigation State**: Active tab is persisted in `localStorage` under `focusquest_active_tab`.
+- **Tabbed Navigation**: 3-tab layout (Hero, Adventures, Stats).
+- **Hero Tab**: Contains Hero Panel, Shop, and Logs (with settings and cloud status). Visible ONLY when active.
+- **Adventures Tab**: Task tracker with project/task/subtask management and active timer.
 - **Stats Tab**:
     - Dashboard with 6 counters.
     - Pure CSS Bar Charts for 7-day productivity/profitability.
-    - Advanced Report with Project and Quick Date filters (Today, Yesterday, Week).
+    - Advanced Report with 3-column control layout:
+        1. Project & Quick Filters (Today, Yesterday, Week).
+        2. Start & End Datetimes (stacked).
+        3. Generate & Export buttons (stacked).
+- **Navigation State**: Active tab is persisted in `localStorage` under `focusquest_active_tab`.
 
 ## External Integrations
 - **Firebase**: Uses Compat version (v10.8.1). Integrated in `index.html`.
