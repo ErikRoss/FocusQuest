@@ -1114,8 +1114,10 @@
         function toggleSound() {
             isSoundOn = !isSoundOn;
             localStorage.setItem('focusquest_sound', isSoundOn ? 'on' : 'off');
-            document.getElementById('sound-icon').className = isSoundOn ? 'fas fa-volume-up' : 'fas fa-volume-mute';
-            document.getElementById('sound-icon').parentElement.className = isSoundOn ? 'h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-blue-400' : 'h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-slate-500';
+            const icon = document.getElementById('sound-icon');
+            const btn = icon.parentElement;
+            icon.className = isSoundOn ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            btn.className = `w-8 h-8 bg-slate-800/80 border border-slate-700 rounded-lg flex items-center justify-center text-xs shadow-sm hover:scale-105 transition-transform ${isSoundOn ? 'text-blue-400' : 'text-slate-500'}`;
             if (isSoundOn) sfx.coin();
         }
 
