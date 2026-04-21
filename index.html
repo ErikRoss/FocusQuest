@@ -222,105 +222,259 @@
             cursor: pointer;
             accent-color: #3b82f6;
         }
+
+        /* TABS NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .tab-content {
+            display: none;
+            padding-bottom: 80px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* STATS CHART */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 150px;
+            padding-top: 20px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(0deg, #3b82f6 0%, #60a5fa 100%);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: height 1s ease-out;
+            min-height: 4px;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .chart-bar::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            font-weight: bold;
+            color: #94a3b8;
+        }
+
+        .chart-label {
+            font-size: 9px;
+            text-align: center;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        @media (min-width: 1024px) {
+            .tab-content.active {
+                display: grid;
+            }
+            #tab-hero.active {
+                grid-template-columns: repeat(12, minmax(0, 1fr));
+            }
+            #tab-hero > aside {
+                grid-column: span 12;
+            }
+        }
     </style>
 </head>
 
 <body class="p-4 md:p-8 selection:bg-blue-500 selection:text-white relative">
 
-    <div id="app" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div id="app" class="max-w-7xl mx-auto">
+        <!-- TAB: HERO -->
+        <section id="tab-hero" class="tab-content active grid grid-cols-1 lg:grid-cols-12 gap-6 animate-slide">
+            <aside class="lg:col-span-4 lg:col-start-5 space-y-6">
+                <!-- ТУЛБАР В БІЧНІЙ ПАНЕЛІ -->
+                <div class="flex flex-col gap-2 w-full">
+                    <div class="flex w-full h-11 gap-2">
+                        <div id="cloud-status" data-i18n-title="cloud_status_tt"
+                            class="flex-1 h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl text-[10px] sm:text-xs font-bold text-slate-400 flex items-center justify-center gap-1 sm:gap-2 shadow-sm transition-colors px-2">
+                            <i class="fas fa-hdd"></i> <span id="cloud-status-text" class="truncate"
+                                data-i18n="offline">Локальне збереження</span>
+                        </div>
 
-        <aside class="lg:col-span-4 space-y-6">
-            <!-- ТУЛБАР В БІЧНІЙ ПАНЕЛІ -->
-            <div class="flex flex-col gap-2 w-full">
-                <div class="flex w-full h-11 gap-2">
-                    <div id="cloud-status" data-i18n-title="cloud_status_tt"
-                        class="flex-1 h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl text-[10px] sm:text-xs font-bold text-slate-400 flex items-center justify-center gap-1 sm:gap-2 shadow-sm transition-colors px-2">
-                        <i class="fas fa-hdd"></i> <span id="cloud-status-text" class="truncate"
-                            data-i18n="offline">Локальне збереження</span>
+                        <button id="auth-btn" onclick="toggleAuth()" data-i18n-title="login_google"
+                            class="w-11 min-w-[44px] h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-blue-400">
+                            <i id="auth-icon" class="fab fa-google"></i>
+                        </button>
                     </div>
 
-                    <button id="auth-btn" onclick="toggleAuth()" data-i18n-title="login_google"
-                        class="w-11 min-w-[44px] h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-blue-400">
-                        <i id="auth-icon" class="fab fa-google"></i>
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-4 h-11 gap-2">
-                    <button onclick="toggleLanguage()" data-i18n-title="toggle_lang"
-                        class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform"><span
-                            id="lang-icon">🇺🇦</span></button>
-                    <button onclick="toggleTheme()" data-i18n-title="toggle_theme"
-                        class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-yellow-400"><i
-                            id="theme-icon" class="fas fa-sun"></i></button>
-                    <button onclick="toggleSound()" data-i18n-title="toggle_sound"
-                        class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-blue-400"><i
-                            id="sound-icon" class="fas fa-volume-up"></i></button>
-                    <button onclick="openAchievementsModal()" data-i18n-title="achievements_btn"
-                        class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-orange-400"><i
-                            class="fas fa-trophy"></i></button>
-                </div>
-            </div>
-
-            <!-- HERO PANEL -->
-            <div class="glass-card rounded-2xl p-6 text-center border-t-4 border-blue-500 relative overflow-hidden">
-                <div class="absolute top-4 right-4 bg-orange-500/20 text-orange-400 border border-orange-500/50 px-2 py-1 rounded-lg text-xs font-bold flex items-center"
-                    data-i18n-title="streak_tt">
-                    <i class="fas fa-fire mr-1"></i> <span id="streak-days">1</span>
-                </div>
-                <div class="relative inline-block mb-4 mt-2 cursor-pointer hover:scale-105 transition-transform"
-                    onclick="openClassModal()" data-i18n-title="choose_class">
-                    <div
-                        class="w-24 h-24 bg-slate-800 rounded-full mx-auto flex items-center justify-center border-4 border-slate-600 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                        <i id="hero-avatar-icon" class="fas fa-user-astronaut text-4xl text-blue-400"></i>
-                    </div>
-                    <div id="user-level-badge" data-i18n-title="level_tt"
-                        class="absolute -bottom-2 -right-2 bg-blue-600 text-[10px] rpg-font px-2 py-1 rounded border-2 border-slate-900 shadow-lg text-white">
-                        LVL 1</div>
-                </div>
-                <h2 id="user-name" class="text-xl font-bold mb-1" data-i18n="hero_name">Герой Фокусу</h2>
-                <p id="hero-class-name" class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-4">
-                    НОВАЧОК</p>
-
-                <div class="mb-3 text-left">
-                    <div class="flex justify-between text-xs mb-1 font-semibold">
-                        <span><i class="fas fa-heart text-red-500 mr-1"></i> <span
-                                data-i18n="health">Здоров'я</span></span>
-                        <span id="hp-text">100/100</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-3 border border-slate-700"
-                        data-i18n-title="hp_bar_tt">
-                        <div id="hp-bar-fill" class="hp-bar h-3 rounded-full" style="width: 100%"></div>
+                    <div class="grid grid-cols-4 h-11 gap-2">
+                        <button onclick="toggleLanguage()" data-i18n-title="toggle_lang"
+                            class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform"><span
+                                id="lang-icon">🇺🇦</span></button>
+                        <button onclick="toggleTheme()" data-i18n-title="toggle_theme"
+                            class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-yellow-400"><i
+                                id="theme-icon" class="fas fa-sun"></i></button>
+                        <button onclick="toggleSound()" data-i18n-title="toggle_sound"
+                            class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-blue-400"><i
+                                id="sound-icon" class="fas fa-volume-up"></i></button>
+                        <button onclick="openAchievementsModal()" data-i18n-title="achievements_btn"
+                            class="h-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-xl flex items-center justify-center text-sm shadow-sm hover:scale-105 transition-transform text-orange-400"><i
+                                class="fas fa-trophy"></i></button>
                     </div>
                 </div>
 
-                <div class="mb-4 text-left">
-                    <div class="flex justify-between text-xs mb-1 font-semibold">
-                        <span><i class="fas fa-star text-blue-500 mr-1"></i> <span
-                                data-i18n="experience">Досвід</span></span>
-                        <span id="xp-text">0/1000</span>
+                <!-- HERO PANEL -->
+                <div class="glass-card rounded-2xl p-6 text-center border-t-4 border-blue-500 relative overflow-hidden">
+                    <div class="absolute top-4 right-4 bg-orange-500/20 text-orange-400 border border-orange-500/50 px-2 py-1 rounded-lg text-xs font-bold flex items-center"
+                        data-i18n-title="streak_tt">
+                        <i class="fas fa-fire mr-1"></i> <span id="streak-days">1</span>
                     </div>
-                    <div class="w-full bg-slate-800 rounded-full h-3 border border-slate-700"
-                        data-i18n-title="xp_bar_tt">
-                        <div id="xp-bar-fill" class="xp-bar h-3 rounded-full" style="width: 0%"></div>
+                    <div class="relative inline-block mb-4 mt-2 cursor-pointer hover:scale-105 transition-transform"
+                        onclick="openClassModal()" data-i18n-title="choose_class">
+                        <div
+                            class="w-24 h-24 bg-slate-800 rounded-full mx-auto flex items-center justify-center border-4 border-slate-600 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                            <i id="hero-avatar-icon" class="fas fa-user-astronaut text-4xl text-blue-400"></i>
+                        </div>
+                        <div id="user-level-badge" data-i18n-title="level_tt"
+                            class="absolute -bottom-2 -right-2 bg-blue-600 text-[10px] rpg-font px-2 py-1 rounded border-2 border-slate-900 shadow-lg text-white">
+                            LVL 1</div>
+                    </div>
+                    <h2 id="user-name" class="text-xl font-bold mb-1" data-i18n="hero_name">Герой Фокусу</h2>
+                    <p id="hero-class-name" class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-4">
+                        НОВАЧОК</p>
+
+                    <div class="mb-3 text-left">
+                        <div class="flex justify-between text-xs mb-1 font-semibold">
+                            <span><i class="fas fa-heart text-red-500 mr-1"></i> <span
+                                    data-i18n="health">Здоров'я</span></span>
+                            <span id="hp-text">100/100</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 border border-slate-700"
+                            data-i18n-title="hp_bar_tt">
+                            <div id="hp-bar-fill" class="hp-bar h-3 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 text-left">
+                        <div class="flex justify-between text-xs mb-1 font-semibold">
+                            <span><i class="fas fa-star text-blue-500 mr-1"></i> <span
+                                    data-i18n="experience">Досвід</span></span>
+                            <span id="xp-text">0/1000</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 border border-slate-700"
+                            data-i18n-title="xp_bar_tt">
+                            <div id="xp-bar-fill" class="xp-bar h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-4 border-t border-slate-700/50 pt-4 mt-2">
+                        <div class="text-center" data-i18n-title="gold_tt">
+                            <p class="text-[10px] text-slate-400 uppercase" data-i18n="gold">Золото</p>
+                            <p class="text-lg font-bold text-yellow-400"><i class="fas fa-coins text-sm"></i> <span
+                                    id="user-gold">0</span></p>
+                        </div>
+                        <div class="text-center" data-i18n-title="multiplier_tt">
+                            <p class="text-[10px] text-slate-400 uppercase" data-i18n="xp_multiplier">Множник XP</p>
+                            <p class="text-lg font-bold text-green-400" id="user-multiplier">x1.0</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex justify-center gap-4 border-t border-slate-700/50 pt-4 mt-2">
-                    <div class="text-center" data-i18n-title="gold_tt">
-                        <p class="text-[10px] text-slate-400 uppercase" data-i18n="gold">Золото</p>
-                        <p class="text-lg font-bold text-yellow-400"><i class="fas fa-coins text-sm"></i> <span
-                                id="user-gold">0</span></p>
+                <!-- SHOP -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-yellow-500">
+                    <h3 class="font-bold mb-4 flex items-center text-yellow-400">
+                        <i class="fas fa-store mr-2"></i> <span data-i18n="guild_shop">Крамниця Гільдії</span>
+                    </h3>
+                    <div class="space-y-3">
+                        <div
+                            class="flex justify-between items-center bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                            <div>
+                                <p class="text-sm font-semibold text-red-400"><i class="fas fa-flask mr-1"></i> <span
+                                        data-i18n="health_potion">Зілля Здоров'я</span></p>
+                                <p class="text-[10px] text-slate-400" data-i18n="health_potion_desc">+30 HP. Рятує від
+                                    прокрастинації.</p>
+                            </div>
+                            <button onclick="buyItem('health')" data-i18n-title="shop_health"
+                                class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-xs font-bold text-yellow-400 border border-slate-600 transition">🪙
+                                500</button>
+                        </div>
+                        <div
+                            class="flex justify-between items-center bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                            <div>
+                                <p class="text-sm font-semibold text-blue-400"><i class="fas fa-bolt mr-1"></i> <span
+                                        data-i18n="focus_potion">Зілля Фокусу</span></p>
+                                <p class="text-[10px] text-slate-400" data-i18n="focus_potion_desc">Подвоює XP на 30 хв.</p>
+                            </div>
+                            <button onclick="buyItem('focus')" data-i18n-title="shop_focus"
+                                class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-xs font-bold text-yellow-400 border border-slate-600 transition">🪙
+                                1000</button>
+                        </div>
                     </div>
-                    <div class="text-center" data-i18n-title="multiplier_tt">
-                        <p class="text-[10px] text-slate-400 uppercase" data-i18n="xp_multiplier">Множник XP</p>
-                        <p class="text-lg font-bold text-green-400" id="user-multiplier">x1.0</p>
+                    <h4 class="text-xs text-slate-500 uppercase font-bold mt-4 mb-2" data-i18n="inventory">Ваш інвентар</h4>
+                    <div class="flex gap-2">
+                        <button onclick="usePotion('health')" data-i18n-title="use_health"
+                            class="flex-1 bg-red-900/30 hover:bg-red-900/50 border border-red-500/30 p-2 rounded-xl text-center transition">
+                            <i class="fas fa-flask text-red-500"></i> <span id="inv-health"
+                                class="font-mono ml-1 text-sm">0</span>
+                        </button>
+                        <button onclick="usePotion('focus')" data-i18n-title="use_focus"
+                            class="flex-1 bg-blue-900/30 hover:bg-blue-900/50 border border-blue-500/30 p-2 rounded-xl text-center transition">
+                            <i class="fas fa-bolt text-blue-500"></i> <span id="inv-focus"
+                                class="font-mono ml-1 text-sm">0</span>
+                        </button>
                     </div>
                 </div>
-            </div>
 
+                <!-- LOGS -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-semibold mb-4 text-sm text-slate-400" data-i18n="adventure_log">Журнал пригод</h3>
+                    <div id="event-logs" class="space-y-2 text-xs max-h-40 overflow-y-auto pr-2"></div>
+                </div>
+            </aside>
+        </section>
+
+        <!-- TAB: ADVENTURES -->
+        <section id="tab-adventures" class="tab-content space-y-6 animate-slide">
             <!-- ACTIVE TIMER -->
             <div id="active-timer"
-                class="hidden glass-card rounded-2xl p-5 border-2 border-blue-500 timer-glow text-center">
+                class="hidden glass-card rounded-2xl p-5 border-2 border-blue-500 timer-glow text-center max-w-xl mx-auto">
                 <h4 id="timer-task-name" class="text-blue-400 font-bold text-lg truncate" data-i18n="task">Завдання</h4>
                 <p id="timer-project-name" class="text-xs text-slate-400 mb-3 truncate" data-i18n="project">Проєкт</p>
                 <div class="text-4xl font-mono font-black tracking-wider drop-shadow-md mb-3" id="timer-display"
@@ -342,87 +496,6 @@
                 </div>
             </div>
 
-            <!-- LOGS -->
-            <div class="glass-card rounded-2xl p-6">
-                <h3 class="font-semibold mb-4 text-sm text-slate-400" data-i18n="adventure_log">Журнал пригод</h3>
-                <div id="event-logs" class="space-y-2 text-xs max-h-40 overflow-y-auto pr-2"></div>
-            </div>
-
-            <!-- EARNINGS STATS -->
-            <div class="glass-card rounded-2xl p-6 relative">
-                <button onclick="exportCSV()"
-                    class="absolute top-4 right-4 text-slate-400 hover:text-emerald-400 transition"
-                    data-i18n-title="export_csv">
-                    <i class="fas fa-file-csv"></i>
-                </button>
-                <h3 class="font-semibold mb-4 flex items-center">
-                    <i class="fas fa-chart-line text-emerald-500 mr-2"></i> <span data-i18n="real_earnings">Реальний
-                        Прибуток</span>
-                </h3>
-                <div class="grid grid-cols-2 gap-3 text-center">
-                    <div class="p-2 bg-slate-800/50 rounded-xl" data-i18n-title="earnings_today">
-                        <p class="text-[10px] text-slate-400 uppercase" data-i18n="today">Сьогодні</p>
-                        <p id="stats-day" class="text-sm font-bold">🪙 0</p>
-                    </div>
-                    <div class="p-2 bg-slate-800/50 rounded-xl" data-i18n-title="earnings_week">
-                        <p class="text-[10px] text-slate-400 uppercase" data-i18n="week">Тиждень</p>
-                        <p id="stats-week" class="text-sm font-bold">🪙 0</p>
-                    </div>
-                    <div class="col-span-2 p-3 bg-emerald-900/20 border border-emerald-500/20 rounded-xl text-center"
-                        data-i18n-title="earnings_total">
-                        <p class="text-[10px] text-emerald-400/70 uppercase" data-i18n="total">Всього</p>
-                        <p id="stats-total" class="text-xl font-black text-emerald-400">🪙 0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SHOP -->
-            <div class="glass-card rounded-2xl p-6 border-t-4 border-yellow-500">
-                <h3 class="font-bold mb-4 flex items-center text-yellow-400">
-                    <i class="fas fa-store mr-2"></i> <span data-i18n="guild_shop">Крамниця Гільдії</span>
-                </h3>
-                <div class="space-y-3">
-                    <div
-                        class="flex justify-between items-center bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                        <div>
-                            <p class="text-sm font-semibold text-red-400"><i class="fas fa-flask mr-1"></i> <span
-                                    data-i18n="health_potion">Зілля Здоров'я</span></p>
-                            <p class="text-[10px] text-slate-400" data-i18n="health_potion_desc">+30 HP. Рятує від
-                                прокрастинації.</p>
-                        </div>
-                        <button onclick="buyItem('health')" data-i18n-title="shop_health"
-                            class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-xs font-bold text-yellow-400 border border-slate-600 transition">🪙
-                            500</button>
-                    </div>
-                    <div
-                        class="flex justify-between items-center bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                        <div>
-                            <p class="text-sm font-semibold text-blue-400"><i class="fas fa-bolt mr-1"></i> <span
-                                    data-i18n="focus_potion">Зілля Фокусу</span></p>
-                            <p class="text-[10px] text-slate-400" data-i18n="focus_potion_desc">Подвоює XP на 30 хв.</p>
-                        </div>
-                        <button onclick="buyItem('focus')" data-i18n-title="shop_focus"
-                            class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-xs font-bold text-yellow-400 border border-slate-600 transition">🪙
-                            1000</button>
-                    </div>
-                </div>
-                <h4 class="text-xs text-slate-500 uppercase font-bold mt-4 mb-2" data-i18n="inventory">Ваш інвентар</h4>
-                <div class="flex gap-2">
-                    <button onclick="usePotion('health')" data-i18n-title="use_health"
-                        class="flex-1 bg-red-900/30 hover:bg-red-900/50 border border-red-500/30 p-2 rounded-xl text-center transition">
-                        <i class="fas fa-flask text-red-500"></i> <span id="inv-health"
-                            class="font-mono ml-1 text-sm">0</span>
-                    </button>
-                    <button onclick="usePotion('focus')" data-i18n-title="use_focus"
-                        class="flex-1 bg-blue-900/30 hover:bg-blue-900/50 border border-blue-500/30 p-2 rounded-xl text-center transition">
-                        <i class="fas fa-bolt text-blue-500"></i> <span id="inv-focus"
-                            class="font-mono ml-1 text-sm">0</span>
-                    </button>
-                </div>
-            </div>
-        </aside>
-
-        <main class="lg:col-span-8 space-y-6">
             <div
                 class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-800/40 p-4 rounded-2xl border border-slate-700">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -446,8 +519,122 @@
                 </button>
             </div>
             <div id="projects-container" class="space-y-6"></div>
-        </main>
+        </section>
+
+        <!-- TAB: STATISTICS -->
+        <section id="tab-stats" class="tab-content space-y-6 animate-slide">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="glass-card p-4 rounded-2xl text-center border-b-2 border-blue-500">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-1" data-i18n="stats_total_xp">Total XP</p>
+                    <p id="total-xp-val" class="text-xl font-black text-blue-400">0</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border-b-2 border-yellow-500">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-1" data-i18n="stats_total_gold">Total Gold</p>
+                    <p id="total-gold-val" class="text-xl font-black text-yellow-400">🪙 0</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border-b-2 border-emerald-500">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-1" data-i18n="stats_total_time">Total Time</p>
+                    <p id="total-time-val" class="text-xl font-black text-emerald-400">0h</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border-b-2 border-orange-500">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-1" data-i18n="stats_quests_done">Quests</p>
+                    <p id="total-quests-val" class="text-xl font-black text-orange-400">0</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border-b-2 border-purple-500">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-1" data-i18n="stats_bosses_slain">Bosses</p>
+                    <p id="total-bosses-val" class="text-xl font-black text-purple-400">0</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border-b-2 border-red-500">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-1" data-i18n="stats_potions_drunk">Potions</p>
+                    <p id="total-potions-val" class="text-xl font-black text-red-400">0</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase mb-4 flex items-center">
+                        <i class="fas fa-chart-bar text-blue-500 mr-2"></i> <span data-i18n="stats_productivity">Productivity</span> (h)
+                    </h3>
+                    <div id="chart-productivity" class="chart-container"></div>
+                    <div id="chart-labels" class="flex justify-around mt-2"></div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase mb-4 flex items-center">
+                        <i class="fas fa-coins text-yellow-500 mr-2"></i> <span data-i18n="stats_profitability">Profitability</span> (🪙)
+                    </h3>
+                    <div id="chart-profitability" class="chart-container"></div>
+                    <div id="chart-labels-gold" class="flex justify-around mt-2"></div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <h3 class="font-bold flex items-center text-slate-300">
+                        <i class="fas fa-file-invoice text-emerald-500 mr-2"></i> <span data-i18n="export_csv">Report</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                        <div class="flex-1 min-w-[150px]">
+                            <label class="block text-[9px] uppercase font-bold text-slate-500 mb-1" data-i18n="filter_project">Project</label>
+                            <select id="report-filter-project" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                                <option value="all" data-i18n="all_projects">All Projects</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] uppercase font-bold text-slate-500 mb-1" data-i18n="filter_start">Start</label>
+                            <input type="datetime-local" id="report-filter-start" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] uppercase font-bold text-slate-500 mb-1" data-i18n="filter_end">End</label>
+                            <input type="datetime-local" id="report-filter-end" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button onclick="renderReport()" class="bg-blue-600 hover:bg-blue-500 px-3 py-2 rounded-lg text-[10px] font-bold transition text-white" data-i18n="generate_report">Generate</button>
+                            <button onclick="exportFilteredCSV()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-2 rounded-lg text-[10px] font-bold transition text-white" data-i18n="export_filtered">Export</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="text-slate-500 border-b border-slate-800">
+                                <th class="pb-2 font-bold uppercase tracking-wider" data-i18n="project">Project</th>
+                                <th class="pb-2 font-bold uppercase tracking-wider" data-i18n="task">Task</th>
+                                <th class="pb-2 font-bold uppercase tracking-wider text-right" data-i18n="time">Time</th>
+                                <th class="pb-2 font-bold uppercase tracking-wider text-right" data-i18n="gold">Gold</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-table-body" class="text-slate-300">
+                            <tr><td colspan="4" class="py-8 text-center text-slate-600 italic" data-i18n="silence">Silence...</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="border-t border-slate-700 font-bold text-white">
+                                <td colspan="2" class="pt-2 uppercase tracking-wider" data-i18n="total">Total</td>
+                                <td id="report-total-time" class="pt-2 text-right">0m</td>
+                                <td id="report-total-gold" class="pt-2 text-right">🪙 0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button onclick="switchTab('hero')" id="nav-hero" class="nav-item active">
+            <i class="fas fa-user-shield"></i>
+            <span data-i18n="tab_hero">Герой</span>
+        </button>
+        <button onclick="switchTab('adventures')" id="nav-adventures" class="nav-item">
+            <i class="fas fa-scroll"></i>
+            <span data-i18n="tab_adventures">Пригоди</span>
+        </button>
+        <button onclick="switchTab('stats')" id="nav-stats" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span data-i18n="tab_stats">Статистика</span>
+        </button>
+    </nav>
 
     <!-- Modal: Level Up -->
     <div id="levelup-modal"
@@ -944,7 +1131,11 @@
                 need_api_key: "Будь ласка, додайте Firebase API Key у код для активації хмарної синхронізації.",
                 choose_class: "Виберіть свій шлях", class_warrior: "Воїн", class_warrior_desc: "Отримує на 50% менше шкоди (HP) від штрафів.", class_mage: "Маг", class_mage_desc: "Отримує на 15% більше досвіду (XP).", class_rogue: "Розбійник", class_rogue_desc: "Знаходить на 20% більше золота (🪙).", class_novice: "Новачок", select_btn: "Обрати",
                 level_up_title: "РІВЕНЬ ПІДВИЩЕНО!", continue_adv: "Продовжити пригоду",
-                discard_session: "Скасувати таймер (не зберігати)", save_session: "Зберегти час", session_summary: "Завершення фокусу", actual_time: "Фактичний час", actual_hours: "Фактично (Год)", actual_minutes: "Фактично (Хв)"
+                discard_session: "Скасувати таймер (не зберігати)", save_session: "Зберегти час", session_summary: "Завершення фокусу", actual_time: "Фактичний час", actual_hours: "Фактично (Год)", actual_minutes: "Фактично (Хв)",
+                tab_hero: "Герой", tab_adventures: "Пригоди", tab_stats: "Статистика",
+                stats_total_xp: "Всього XP", stats_total_gold: "Всього Золота", stats_total_time: "Всього Часу", stats_quests_done: "Завершено Квестів", stats_bosses_slain: "Подолано Босів", stats_potions_drunk: "Випито Зілля",
+                stats_7days_title: "Останні 7 днів", filter_project: "Проєкт", filter_start: "Початок", filter_end: "Кінець", all_projects: "Всі проєкти", generate_report: "Згенерувати звіт", export_filtered: "Експорт фільтрованого",
+                stats_profitability: "Прибутковість", stats_productivity: "Продуктивність"
             },
             en: {
                 offline: "Local Save", syncing: "Syncing...", synced: "Synced", new_profile: "New Profile", cloud_error: "Cloud Error", no_network: "Offline Mode", saved: "Saved", hero_name: "Focus Hero", health: "Health", experience: "Experience", gold: "Gold", xp_multiplier: "XP Multiplier", guild_shop: "Guild Shop", health_potion: "Health Potion", health_potion_desc: "+30 HP. Cures procrastination.", focus_potion: "Focus Potion", focus_potion_desc: "Double XP for 30 min.", inventory: "Your Inventory", real_earnings: "Real Earnings", today: "Today", week: "Week", total: "Total", adventure_log: "Adventure Log", active_quests: "Active Quests", your_worlds: "Your Worlds", active: "Active", completed: "Completed", new_world: "+ New World", empty_active: "No active projects. Start your journey!", empty_completed: "Archive is empty.", create_world_title: "Create New World", project_name: "Project Name", hourly_rate: "Hourly Rate (🪙/hr)", boss_battle: "Boss Battle?", boss_desc: "Project gets an HP bar.", cancel: "Cancel", create: "Create", add: "Add", save: "Save", got_it: "Got it", new_quest: "New Quest", what_to_do: "What needs to be done?", new_subtask: "New Step (Subtask)", what_exactly: "What exactly to do?", manual_time: "Enter Time", hours: "Hours", minutes: "Minutes", attention: "Attention", stop_penalty: "Stop under 5m: -10 HP", stop: "Stop", task: "Task", project: "Project", boss_hp: "Boss HP", rate: "Rate", time: "Time", quest: "Quest", restore: "Restore", err_time: "Please enter correct time.", err_gold: "Not enough gold!", silence: "Silence...", edit_title: "Edit", tasks: "Quests", active_only: "Active", all: "All", focus_finished: "Focus", save_changes: "Save", time_added: "Time added", delete: "Delete", confirm_delete: "Confirm Deletion", delete_project_msg: "Delete this world and all its quests?", delete_task_msg: "Delete this quest?", delete_subtask_msg: "Delete this step?", toggle_lang: "Change language", toggle_theme: "Toggle Dark/Light Mode", toggle_sound: "Toggle Sounds", cloud_status_tt: "Data sync status", view_active: "Show active worlds", view_completed: "Show completed worlds", add_project: "Create a new world (Project)", streak_tt: "Your daily focus streak. Grants XP bonus!", level_tt: "Your current level", hp_bar_tt: "Your health. Drops when you procrastinate", xp_bar_tt: "Your experience towards next level", gold_tt: "Current gold balance", multiplier_tt: "XP Bonus from streak and potions", timer_display_tt: "Focus time", earnings_today: "Earned today", earnings_week: "Earned this week", earnings_total: "Total earnings", shop_health: "Buy Health Potion", shop_focus: "Buy Focus Potion", use_health: "Drink potion (restores HP)", use_focus: "Drink potion (doubles XP)", cancel_action: "Cancel action", confirm_action: "Confirm", collapse: "Collapse / Expand", complete_project: "Complete world and move to archive", restore_project: "Restore world from archive", delete_project: "Delete this world", add_quest: "Add a new quest to this world", show_active_tasks: "Show only uncompleted quests", show_all_tasks: "Show all quests", drag_handle: "Drag to reorder", mark_done: "Mark as done / undone", edit: "Edit", manual_time_btn: "Log time manually", start_timer: "Start focus", stop_timer: "Stop focus", add_subtask: "Add subtask (step)", delete_task: "Delete this quest", delete_subtask: "Delete this step", export_csv: "Export report to CSV",
@@ -955,7 +1146,11 @@
                 need_api_key: "Please add your Firebase API Key to the code to enable cloud sync.",
                 choose_class: "Choose your Path", class_warrior: "Warrior", class_warrior_desc: "Takes 50% less damage (HP) from penalties.", class_mage: "Mage", class_mage_desc: "Earns 15% more experience (XP).", class_rogue: "Rogue", class_rogue_desc: "Finds 20% more gold (🪙).", class_novice: "Novice", select_btn: "Select",
                 level_up_title: "LEVEL UP!", continue_adv: "Continue Adventure",
-                discard_session: "Discard timer (do not save)", save_session: "Save Time", session_summary: "Focus Completed", actual_time: "Actual time tracked", actual_hours: "Actual (Hrs)", actual_minutes: "Actual (Mins)"
+                discard_session: "Discard timer (do not save)", save_session: "Save Time", session_summary: "Focus Completed", actual_time: "Actual time tracked", actual_hours: "Actual (Hrs)", actual_minutes: "Actual (Mins)",
+                tab_hero: "Hero", tab_adventures: "Adventures", tab_stats: "Stats",
+                stats_total_xp: "Total XP", stats_total_gold: "Total Gold", stats_total_time: "Total Time", stats_quests_done: "Quests Completed", stats_bosses_slain: "Bosses Defeated", stats_potions_drunk: "Potions Used",
+                stats_7days_title: "Last 7 Days", filter_project: "Project", filter_start: "Start", filter_end: "End", all_projects: "All Projects", generate_report: "Generate Report", export_filtered: "Export Filtered",
+                stats_profitability: "Profitability", stats_productivity: "Productivity"
             }
         };
 
@@ -1140,6 +1335,10 @@
             }
 
             fixMissingState(); checkStreak(); renderAll();
+            
+            // Ініціалізація вкладок
+            const lastTab = localStorage.getItem('focusquest_active_tab') || 'hero';
+            switchTab(lastTab);
 
             if (state.activeSession) {
                 const p = state.projects.find(pr => pr.id === state.activeSession.projectId);
@@ -1360,6 +1559,18 @@
         }
         function closeLevelUpModal() { document.getElementById('levelup-modal').style.display = 'none'; }
 
+        // --- TABS & NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`nav-${tabId}`).classList.add('active');
+            
+            localStorage.setItem('focusquest_active_tab', tabId);
+            if (tabId === 'stats') renderStats();
+        }
+
         // --- ОСНОВНИЙ РЕНДЕР ---
         function renderAll() { updateUserStats(); renderStats(); renderProjects(); renderLogs(); updateTimerDisplay(); }
 
@@ -1401,9 +1612,160 @@
         }
 
         function getXpMultiplier() { let m = 1.0 + (state.user.streak * 0.05); if (state.activeBuff) m *= 2; if (state.user.heroClass === 'mage') m *= 1.15; return m; }
+        
         function renderStats() {
-            const now = new Date(); const getE = (p) => state.earnings.filter(e => { const d = new Date(e.date); if (p === 'day') return d.toDateString() === now.toDateString(); if (p === 'week') return (now - d) < 7 * 24 * 60 * 60 * 1000; return true; }).reduce((sum, e) => sum + e.amount, 0);
-            document.getElementById('stats-day').innerText = `🪙 ${getE('day').toFixed(0)}`; document.getElementById('stats-week').innerText = `🪙 ${getE('week').toFixed(0)}`; document.getElementById('stats-total').innerText = `🪙 ${getE('total').toFixed(0)}`;
+            // General Stats
+            const totalTimeSec = state.projects.reduce((sum, p) => sum + p.tasks.reduce((s, t) => s + (t.timeSpent || 0) + (t.subtasks || []).reduce((ss, st) => ss + (st.timeSpent || 0), 0), 0), 0);
+            document.getElementById('total-xp-val').innerText = Math.floor(state.user.xp);
+            document.getElementById('total-gold-val').innerText = `🪙 ${Math.floor(state.user.gold)}`;
+            document.getElementById('total-time-val').innerText = `${(totalTimeSec / 3600).toFixed(1)}h`;
+            document.getElementById('total-quests-val').innerText = state.stats.quests || 0;
+            document.getElementById('total-bosses-val').innerText = state.stats.bosses || 0;
+            document.getElementById('total-potions-val').innerText = state.stats.potions || 0;
+
+            // Chart Data Aggregation (last 7 days)
+            const days = [], prodData = [], profitData = [], labels = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const dStr = d.toDateString();
+                days.push(dStr);
+                labels.push(d.toLocaleDateString([], { weekday: 'short' }));
+                
+                const dayEarnings = state.earnings.filter(e => new Date(e.date).toDateString() === dStr).reduce((sum, e) => sum + e.amount, 0);
+                profitData.push(dayEarnings);
+
+                // For productivity, we need logs of type 'gold' or 'info' that have focus time, 
+                // but currently we don't store time per day in a simple array.
+                // We'll use logs as a proxy or simply show earnings if rate is set.
+                // Let's use the 'earnings' as a base for productivity if rate > 0, 
+                // and for now, we'll just use a mock-up calculation based on logs if needed.
+                // BETTER: iterate all earnings and logs to find time per day.
+                const dayTimeSec = state.logs.filter(l => new Date(l.date).toDateString() === dStr && l.message.includes('(')).reduce((sum, l) => {
+                    const match = l.message.match(/\((\d+)m\)/);
+                    return sum + (match ? parseInt(match[1]) * 60 : 0);
+                }, 0);
+                prodData.push(dayTimeSec / 3600);
+            }
+
+            // Render Productivity Chart
+            const maxProd = Math.max(...prodData, 1);
+            document.getElementById('chart-productivity').innerHTML = prodData.map((v, i) => `<div class="chart-bar" style="height: ${(v / maxProd) * 100}%" data-value="${v.toFixed(1)}h"></div>`).join('');
+            document.getElementById('chart-labels').innerHTML = labels.map(l => `<span class="chart-label">${l}</span>`).join('');
+
+            // Render Profitability Chart
+            const maxProfit = Math.max(...profitData, 1);
+            document.getElementById('chart-profitability').innerHTML = profitData.map((v, i) => `<div class="chart-bar" style="height: ${(v / maxProfit) * 100}%" data-value="🪙${Math.floor(v)}"></div>`).join('');
+            document.getElementById('chart-labels-gold').innerHTML = labels.map(l => `<span class="chart-label">${l}</span>`).join('');
+
+            // Update project filter dropdown
+            const projSelect = document.getElementById('report-filter-project');
+            const currentVal = projSelect.value;
+            projSelect.innerHTML = `<option value="all">${t('all_projects')}</option>` + state.projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+            projSelect.value = currentVal;
+
+            // Set default dates if empty
+            if (!document.getElementById('report-filter-start').value) {
+                const start = new Date(); start.setHours(0,0,0,0);
+                document.getElementById('report-filter-start').value = new Date(start.getTime() - start.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            }
+            if (!document.getElementById('report-filter-end').value) {
+                const end = new Date(); end.setHours(23,59,59,999);
+                document.getElementById('report-filter-end').value = new Date(end.getTime() - end.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            }
+        }
+
+        function renderReport() {
+            const pid = document.getElementById('report-filter-project').value;
+            const start = new Date(document.getElementById('report-filter-start').value).getTime() || 0;
+            const end = new Date(document.getElementById('report-filter-end').value).getTime() || Infinity;
+
+            const tbody = document.getElementById('report-table-body');
+            let totalTime = 0, totalGold = 0, rows = [];
+
+            state.projects.forEach(p => {
+                if (pid !== 'all' && p.id !== pid) return;
+                
+                p.tasks.forEach(tk => {
+                    // Check logs for this task/subtask in range
+                    const taskLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(tk.title));
+                    if (taskLogs.length > 0) {
+                        const timeMins = taskLogs.reduce((sum, l) => {
+                            const match = l.message.match(/\((\d+)m\)/);
+                            return sum + (match ? parseInt(match[1]) : 0);
+                        }, 0);
+                        const gold = taskLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                        
+                        if (timeMins > 0 || gold > 0) {
+                            rows.push({ proj: p.name, task: tk.title, time: timeMins, gold: gold });
+                            totalTime += timeMins;
+                            totalGold += gold;
+                        }
+                    }
+
+                    (tk.subtasks || []).forEach(st => {
+                        const stLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(st.title));
+                        if (stLogs.length > 0) {
+                            const timeMins = stLogs.reduce((sum, l) => {
+                                const match = l.message.match(/\((\d+)m\)/);
+                                return sum + (match ? parseInt(match[1]) : 0);
+                            }, 0);
+                            const gold = stLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                            
+                            if (timeMins > 0 || gold > 0) {
+                                rows.push({ proj: p.name, task: `${tk.title} > ${st.title}`, time: timeMins, gold: gold });
+                                totalTime += timeMins;
+                                totalGold += gold;
+                            }
+                        }
+                    });
+                });
+            });
+
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-600 italic">${t('silence')}</td></tr>`;
+            } else {
+                tbody.innerHTML = rows.map(r => `<tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition"><td class="py-2 pr-2">${r.proj}</td><td class="py-2 pr-2 text-slate-400">${r.task}</td><td class="py-2 text-right font-mono">${r.time}m</td><td class="py-2 text-right font-mono text-yellow-500">🪙 ${r.gold}</td></tr>`).join('');
+            }
+
+            document.getElementById('report-total-time').innerText = `${totalTime}m`;
+            document.getElementById('report-total-gold').innerText = `🪙 ${totalGold}`;
+        }
+
+        function exportFilteredCSV() {
+            const pid = document.getElementById('report-filter-project').value;
+            const start = new Date(document.getElementById('report-filter-start').value).getTime() || 0;
+            const end = new Date(document.getElementById('report-filter-end').value).getTime() || Infinity;
+
+            let csv = "\uFEFFProject,Task,Time(Minutes),Gold\n";
+            let totalT = 0, totalG = 0;
+
+            state.projects.forEach(p => {
+                if (pid !== 'all' && p.id !== pid) return;
+                p.tasks.forEach(tk => {
+                    const taskLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(tk.title));
+                    const timeM = taskLogs.reduce((sum, l) => { const match = l.message.match(/\((\d+)m\)/); return sum + (match ? parseInt(match[1]) : 0); }, 0);
+                    const gold = taskLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                    if (timeM > 0 || gold > 0) {
+                        csv += `"${p.name}","${tk.title}",${timeM},${gold}\n`;
+                        totalT += timeM; totalG += gold;
+                    }
+                    (tk.subtasks || []).forEach(st => {
+                        const stLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(st.title));
+                        const stTimeM = stLogs.reduce((sum, l) => { const match = l.message.match(/\((\d+)m\)/); return sum + (match ? parseInt(match[1]) : 0); }, 0);
+                        const stGold = stLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                        if (stTimeM > 0 || stGold > 0) {
+                            csv += `"${p.name}","${tk.title} > ${st.title}",${stTimeM},${stGold}\n`;
+                            totalT += stTimeM; totalG += stGold;
+                        }
+                    });
+                });
+            });
+
+            csv += `\nTOTAL,,,Time(Mins),Gold\n,,,${totalT},${totalG}\n`;
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `focusquest_accounting_${new Date().toISOString().slice(0, 10)}.csv`; a.click();
         }
 
         function switchView(view) { currentView = view; const bA = document.getElementById('btn-view-active'), bC = document.getElementById('btn-view-completed'); if (view === 'active') { bA.className = "px-3 py-1 text-xs font-bold rounded bg-blue-600 text-white transition"; bC.className = "px-3 py-1 text-xs font-bold rounded text-slate-400 hover:text-slate-200 transition"; } else { bA.className = "px-3 py-1 text-xs font-bold rounded text-slate-400 hover:text-slate-200 transition"; bC.className = "px-3 py-1 text-xs font-bold rounded bg-slate-700 text-white transition"; } renderProjects(); }
