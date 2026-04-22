@@ -326,43 +326,45 @@
     <div id="app" class="max-w-7xl mx-auto space-y-6">
         <!-- TAB: WELCOME / LANDING -->
         <section id="tab-welcome" class="tab-content flex flex-col items-center justify-center min-h-[80vh] text-center p-6 space-y-12 animate-fade-in">
-            <div class="space-y-4">
-                <div class="w-32 h-32 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center shadow-2xl shadow-blue-500/20 rotate-3 hover:rotate-0 transition-transform duration-500">
-                    <i class="fas fa-user-astronaut text-6xl text-white"></i>
+            <div id="welcome-content" class="w-full flex flex-col items-center space-y-12 transition-all duration-[800ms] ease-in-out transform">
+                <div class="space-y-4">
+                    <div class="w-32 h-32 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center shadow-2xl shadow-blue-500/20 rotate-3 hover:rotate-0 transition-transform duration-500">
+                        <i class="fas fa-user-astronaut text-6xl text-white"></i>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tighter rpg-font bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent py-2" data-i18n="welcome_title">FocusQuest</h1>
+                    <p class="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto font-light" data-i18n="welcome_tagline">Перетворіть своє життя на епічну RPG пригоду</p>
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold tracking-tighter rpg-font bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent py-2" data-i18n="welcome_title">FocusQuest</h1>
-                <p class="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto font-light" data-i18n="welcome_tagline">Перетворіть своє життя на епічну RPG пригоду</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
+                    <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-500 space-y-3">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mx-auto">
+                            <i class="fas fa-gamepad text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg" data-i18n="welcome_feature_1">Гейміфікація</h3>
+                        <p class="text-sm text-slate-400" data-i18n="welcome_feature_1_desc">Отримуйте XP та золото за виконання реальних завдань.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl border-t-4 border-red-500 space-y-3">
+                        <div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 mx-auto">
+                            <i class="fas fa-dragon text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg" data-i18n="welcome_feature_2">Битви з Босами</h3>
+                        <p class="text-sm text-slate-400" data-i18n="welcome_feature_2_desc">Створюйте складні проєкти як босів з власним HP.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl border-t-4 border-emerald-500 space-y-3">
+                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 mx-auto">
+                            <i class="fas fa-chart-line text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg" data-i18n="welcome_feature_3">Глибока Статистика</h3>
+                        <p class="text-sm text-slate-400" data-i18n="welcome_feature_3_desc">Аналізуйте свій прогрес за допомогою детальних звітів.</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
-                <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-500 space-y-3">
-                    <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mx-auto">
-                        <i class="fas fa-gamepad text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg" data-i18n="welcome_feature_1">Гейміфікація</h3>
-                    <p class="text-sm text-slate-400" data-i18n="welcome_feature_1_desc">Отримуйте XP та золото за виконання реальних завдань.</p>
-                </div>
-                <div class="glass-card p-6 rounded-2xl border-t-4 border-red-500 space-y-3">
-                    <div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 mx-auto">
-                        <i class="fas fa-dragon text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg" data-i18n="welcome_feature_2">Битви з Босами</h3>
-                    <p class="text-sm text-slate-400" data-i18n="welcome_feature_2_desc">Створюйте складні проєкти як босів з власним HP.</p>
-                </div>
-                <div class="glass-card p-6 rounded-2xl border-t-4 border-emerald-500 space-y-3">
-                    <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 mx-auto">
-                        <i class="fas fa-chart-line text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg" data-i18n="welcome_feature_3">Глибока Статистика</h3>
-                    <p class="text-sm text-slate-400" data-i18n="welcome_feature_3_desc">Аналізуйте свій прогрес за допомогою детальних звітів.</p>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-                <button onclick="loadDemoMode()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-4 px-8 rounded-2xl font-bold text-lg shadow-lg shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
+            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md relative z-10 transition-all duration-[800ms] ease-in-out transform">
+                <button onclick="loadDemoMode()" id="btn-try-demo" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-4 px-8 rounded-2xl font-bold text-lg shadow-lg shadow-blue-500/20 transition-all duration-[800ms] hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
                     <i class="fas fa-play-circle"></i> <span data-i18n="btn_try_demo">Спробувати Демо</span>
                 </button>
-                <button onclick="startFresh()" class="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 py-4 px-8 rounded-2xl font-bold text-lg transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
+                <button onclick="startFresh()" id="btn-start-new" class="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 py-4 px-8 rounded-2xl font-bold text-lg transition-all duration-[800ms] hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
                     <i class="fas fa-plus"></i> <span data-i18n="btn_start_new">Почати нову гру</span>
                 </button>
             </div>
@@ -1296,18 +1298,43 @@
         }
 
         function loadDemoMode() {
-            state = JSON.parse(JSON.stringify(DEMO_STATE)); // Клонуємо демо-стан
-            localStorage.setItem('focusquest_v2', JSON.stringify(state));
-            renderAll();
-            switchTab('hero');
-            window.location.hash = 'hero';
+            const content = document.getElementById('welcome-content');
+            const btnDemo = document.getElementById('btn-try-demo');
+            const btnNew = document.getElementById('btn-start-new');
+            
+            content.classList.add('-translate-y-[150vh]', 'opacity-0');
+            btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
+            
+            // Переміщуємо кнопку "Нова гра" вгору по центру
+            btnNew.classList.add('fixed', 'top-4', 'left-1/2', '-translate-x-1/2', 'z-50', 'w-auto', 'max-w-xs');
+            document.body.appendChild(btnNew);
+
+            setTimeout(() => {
+                state = JSON.parse(JSON.stringify(DEMO_STATE));
+                localStorage.setItem('focusquest_v2', JSON.stringify(state));
+                renderAll();
+                switchTab('hero');
+                window.location.hash = 'hero';
+            }, 800);
         }
+
         function startFresh() {
-            state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-            localStorage.setItem('focusquest_v2', JSON.stringify(state));
-            renderAll();
-            switchTab('hero');
-            window.location.hash = 'hero';
+            const content = document.getElementById('welcome-content');
+            const btnDemo = document.getElementById('btn-try-demo');
+            const btnNew = document.getElementById('btn-start-new');
+            
+            if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
+            btnNew.classList.add('-translate-y-[150vh]', 'opacity-0');
+
+            setTimeout(() => {
+                state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                localStorage.setItem('focusquest_v2', JSON.stringify(state));
+                btnNew.remove(); // Видаляємо кнопку, якщо вона була перенесена в body
+                renderAll();
+                switchTab('hero');
+                window.location.hash = 'hero';
+            }, 800);
         }
 
         let timerInterval = null, currentView = 'active', projectFilters = {}, dragSrc = null, deleteTarget = null;
@@ -1700,8 +1727,11 @@
 
             // Ховаємо нижню навігацію на вітальній сторінці
             const nav = document.getElementById('bottom-nav');
-            if (tabId === 'welcome') nav.classList.add('translate-y-20');
-            else nav.classList.remove('translate-y-20');
+            if (tabId === 'welcome') {
+                nav.classList.add('translate-y-20');
+                const btnNew = document.getElementById('btn-start-new');
+                if (btnNew && btnNew.parentElement === document.body) btnNew.remove();
+            } else nav.classList.remove('translate-y-20');
 
             if (tabId !== 'welcome') localStorage.setItem('focusquest_active_tab', tabId);
             if (tabId === 'stats') renderStats();
