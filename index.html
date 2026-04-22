@@ -360,7 +360,10 @@
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md relative z-10 transition-all duration-[800ms] ease-in-out transform">
+            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-2xl relative z-10 transition-all duration-[800ms] ease-in-out transform">
+                <button onclick="continueGame()" id="btn-continue" class="hidden flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-4 px-8 rounded-2xl font-bold text-lg shadow-lg shadow-emerald-500/20 transition-all duration-[800ms] hover:scale-105 active:scale-95 items-center justify-center gap-3">
+                    <i class="fas fa-arrow-right"></i> <span data-i18n="btn_continue">Продовжити пригоду</span>
+                </button>
                 <button onclick="loadDemoMode()" id="btn-try-demo" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-4 px-8 rounded-2xl font-bold text-lg shadow-lg shadow-blue-500/20 transition-all duration-[800ms] hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
                     <i class="fas fa-play-circle"></i> <span data-i18n="btn_try_demo">Спробувати Демо</span>
                 </button>
@@ -1198,6 +1201,7 @@
                 welcome_feature_3_desc: "Аналізуйте прогрес у детальних звітах.",
                 btn_try_demo: "Спробувати Демо",
                 btn_start_new: "Почати нову гру",
+                btn_continue: "Продовжити пригоду",
             },
             en: {
                 offline: "Local Save", syncing: "Syncing...", synced: "Synced", new_profile: "New Profile", cloud_error: "Cloud Error", no_network: "Offline Mode", saved: "Saved", hero_name: "Focus Hero", health: "Health", experience: "Experience", gold: "Gold", xp_multiplier: "XP Multiplier", guild_shop: "Guild Shop", health_potion: "Health Potion", health_potion_desc: "+30 HP. Cures procrastination.", focus_potion: "Focus Potion", focus_potion_desc: "Double XP for 30 min.", inventory: "Your Inventory", real_earnings: "Real Earnings", today: "Today", week: "Week", total: "Total", adventure_log: "Adventure Log", active_quests: "Active Quests", your_worlds: "Your Worlds", active: "Active", completed: "Completed", new_world: "+ New World", empty_active: "No active projects. Start your journey!", empty_completed: "Archive is empty.", create_world_title: "Create New World", project_name: "Project Name", hourly_rate: "Hourly Rate (🪙/hr)", boss_battle: "Boss Battle?", boss_desc: "Project gets an HP bar.", cancel: "Cancel", create: "Create", add: "Add", save: "Save", got_it: "Got it", new_quest: "New Quest", what_to_do: "What needs to be done?", new_subtask: "New Step (Subtask)", what_exactly: "What exactly to do?", manual_time: "Enter Time", hours: "Hours", minutes: "Minutes", attention: "Attention", stop_penalty: "Stop under 5m: -10 HP", stop: "Stop", task: "Task", project: "Project", boss_hp: "Boss HP", rate: "Rate", time: "Time", quest: "Quest", restore: "Restore", err_time: "Please enter correct time.", err_gold: "Not enough gold!", silence: "Silence...", edit_title: "Edit", tasks: "Quests", active_only: "Active", all: "All", focus_finished: "Focus", save_changes: "Save", time_added: "Time added", delete: "Delete", confirm_delete: "Confirm Deletion", delete_project_msg: "Delete this world and all its quests?", delete_task_msg: "Delete this quest?", delete_subtask_msg: "Delete this step?", toggle_lang: "Change language", toggle_theme: "Toggle Dark/Light Mode", toggle_sound: "Toggle Sounds", cloud_status_tt: "Data sync status", view_active: "Show active worlds", view_completed: "Show completed worlds", add_project: "Create a new world (Project)", streak_tt: "Your daily focus streak. Grants XP bonus!", level_tt: "Your current level", hp_bar_tt: "Your health. Drops when you procrastinate", xp_bar_tt: "Your experience towards next level", gold_tt: "Current gold balance", multiplier_tt: "XP Bonus from streak and potions", timer_display_tt: "Focus time", earnings_today: "Earned today", earnings_week: "Earned this week", earnings_total: "Total earnings", shop_health: "Buy Health Potion", shop_focus: "Buy Focus Potion", use_health: "Drink potion (restores HP)", use_focus: "Drink potion (doubles XP)", cancel_action: "Cancel action", confirm_action: "Confirm", collapse: "Collapse / Expand", complete_project: "Complete world and move to archive", restore_project: "Restore world from archive", delete_project: "Delete this world", add_quest: "Add a new quest to this world", show_active_tasks: "Show only uncompleted quests", show_all_tasks: "Show all quests", drag_handle: "Drag to reorder", mark_done: "Mark as done / undone", edit: "Edit", manual_time_btn: "Log time manually", start_timer: "Start focus", stop_timer: "Stop focus", add_subtask: "Add subtask (step)", delete_task: "Delete this quest", delete_subtask: "Delete this step", export_csv: "Report", yesterday: "Yesterday",
@@ -1223,6 +1227,7 @@
                 welcome_feature_3_desc: "Analyze progress with detailed reports.",
                 btn_try_demo: "Try Demo",
                 btn_start_new: "Start New Game",
+                btn_continue: "Continue Adventure",
             }
         };
 
@@ -1297,19 +1302,41 @@
             state = DEFAULT_STATE; // Відновлюємо базовий стан, щоб уникнути крашу
         }
 
+        function continueGame() {
+            const content = document.getElementById('welcome-content');
+            const btnDemo = document.getElementById('btn-try-demo');
+            const btnNew = document.getElementById('btn-start-new');
+            const btnCont = document.getElementById('btn-continue');
+            
+            if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnCont) btnCont.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnNew) btnNew.classList.add('-translate-y-[150vh]', 'opacity-0');
+
+            setTimeout(() => {
+                localStorage.setItem('focusquest_welcome_seen', 'true');
+                const lastTab = localStorage.getItem('focusquest_active_tab') || 'hero';
+                switchTab(lastTab);
+                window.location.hash = lastTab;
+            }, 800);
+        }
+
         function loadDemoMode() {
             const content = document.getElementById('welcome-content');
             const btnDemo = document.getElementById('btn-try-demo');
             const btnNew = document.getElementById('btn-start-new');
+            const btnCont = document.getElementById('btn-continue');
             
-            content.classList.add('-translate-y-[150vh]', 'opacity-0');
-            btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnCont) btnCont.classList.add('-translate-y-[150vh]', 'opacity-0');
             
             // Переміщуємо кнопку "Нова гра" вгору по центру
             btnNew.classList.add('fixed', 'top-4', 'left-1/2', '-translate-x-1/2', 'z-50', 'w-auto', 'max-w-xs');
             document.body.appendChild(btnNew);
 
             setTimeout(() => {
+                localStorage.setItem('focusquest_welcome_seen', 'true');
                 state = JSON.parse(JSON.stringify(DEMO_STATE));
                 localStorage.setItem('focusquest_v2', JSON.stringify(state));
                 renderAll();
@@ -1322,15 +1349,18 @@
             const content = document.getElementById('welcome-content');
             const btnDemo = document.getElementById('btn-try-demo');
             const btnNew = document.getElementById('btn-start-new');
+            const btnCont = document.getElementById('btn-continue');
             
             if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
             if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
+            if (btnCont) btnCont.classList.add('-translate-y-[150vh]', 'opacity-0');
             btnNew.classList.add('-translate-y-[150vh]', 'opacity-0');
 
             setTimeout(() => {
+                localStorage.setItem('focusquest_welcome_seen', 'true');
                 state = JSON.parse(JSON.stringify(DEFAULT_STATE));
                 localStorage.setItem('focusquest_v2', JSON.stringify(state));
-                btnNew.remove(); // Видаляємо кнопку, якщо вона була перенесена в body
+                if (btnNew.parentElement === document.body) btnNew.remove();
                 renderAll();
                 switchTab('hero');
                 window.location.hash = 'hero';
@@ -1485,8 +1515,16 @@
             // Ініціалізація вкладок (Обробка Демо та Вітальної сторінки)
             const hash = window.location.hash.replace('#', '');
             const isFirstVisit = !localStorage.getItem('focusquest_v2');
+            const welcomeSeen = localStorage.getItem('focusquest_welcome_seen') === 'true';
 
-            if (hash === 'welcome' || (isFirstVisit && !hash)) {
+            // Показуємо кнопку "Продовжити", якщо є дані
+            if (!isFirstVisit) {
+                const btnCont = document.getElementById('btn-continue');
+                if (btnCont) btnCont.classList.remove('hidden');
+                if (btnCont) btnCont.classList.add('flex');
+            }
+
+            if (hash === 'welcome' || (isFirstVisit && !welcomeSeen && !hash)) {
                 switchTab('welcome');
             } else {
                 const lastTab = localStorage.getItem('focusquest_active_tab') || 'hero';
