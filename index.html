@@ -1303,15 +1303,25 @@
         }
 
         function continueGame() {
+            const welcome = document.getElementById('tab-welcome');
             const content = document.getElementById('welcome-content');
             const btnDemo = document.getElementById('btn-try-demo');
             const btnNew = document.getElementById('btn-start-new');
             const btnCont = document.getElementById('btn-continue');
             
-            if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnCont) btnCont.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnNew) btnNew.classList.add('-translate-y-[150vh]', 'opacity-0');
+            // Анімуємо весь блок вгору та схлопуємо його висоту
+            welcome.style.maxHeight = welcome.offsetHeight + 'px';
+            welcome.style.transition = 'all 0.8s ease-in-out';
+            setTimeout(() => {
+                welcome.style.maxHeight = '0';
+                welcome.style.opacity = '0';
+                welcome.style.marginTop = '-2rem';
+                welcome.style.pointerEvents = 'none';
+                if (content) content.classList.add('-translate-y-20', 'opacity-0');
+                if (btnDemo) btnDemo.classList.add('opacity-0');
+                if (btnCont) btnCont.classList.add('opacity-0');
+                if (btnNew) btnNew.classList.add('opacity-0');
+            }, 10);
 
             setTimeout(() => {
                 localStorage.setItem('focusquest_welcome_seen', 'true');
@@ -1322,18 +1332,28 @@
         }
 
         function loadDemoMode() {
+            const welcome = document.getElementById('tab-welcome');
             const content = document.getElementById('welcome-content');
             const btnDemo = document.getElementById('btn-try-demo');
             const btnNew = document.getElementById('btn-start-new');
             const btnCont = document.getElementById('btn-continue');
             
-            if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnCont) btnCont.classList.add('-translate-y-[150vh]', 'opacity-0');
-            
-            // Переміщуємо кнопку "Нова гра" вгору по центру
-            btnNew.classList.add('fixed', 'top-4', 'left-1/2', '-translate-x-1/2', 'z-50', 'w-auto', 'max-w-xs');
+            // Виносимо кнопку Нова гра в body до анімації, щоб вона не схлопнулась
+            btnNew.classList.add('fixed', 'top-4', 'left-1/2', '-translate-x-1/2', 'z-50', 'w-auto', 'max-w-xs', 'shadow-2xl');
             document.body.appendChild(btnNew);
+
+            welcome.style.maxHeight = welcome.offsetHeight + 'px';
+            welcome.style.transition = 'all 0.8s ease-in-out';
+            
+            setTimeout(() => {
+                welcome.style.maxHeight = '0';
+                welcome.style.opacity = '0';
+                welcome.style.marginTop = '-2rem';
+                welcome.style.pointerEvents = 'none';
+                if (content) content.classList.add('-translate-y-20', 'opacity-0');
+                if (btnDemo) btnDemo.classList.add('opacity-0');
+                if (btnCont) btnCont.classList.add('opacity-0');
+            }, 10);
 
             setTimeout(() => {
                 localStorage.setItem('focusquest_welcome_seen', 'true');
@@ -1346,21 +1366,37 @@
         }
 
         function startFresh() {
+            const welcome = document.getElementById('tab-welcome');
             const content = document.getElementById('welcome-content');
             const btnDemo = document.getElementById('btn-try-demo');
             const btnNew = document.getElementById('btn-start-new');
             const btnCont = document.getElementById('btn-continue');
             
-            if (content) content.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnDemo) btnDemo.classList.add('-translate-y-[150vh]', 'opacity-0');
-            if (btnCont) btnCont.classList.add('-translate-y-[150vh]', 'opacity-0');
-            btnNew.classList.add('-translate-y-[150vh]', 'opacity-0');
+            const isFloating = btnNew.parentElement === document.body;
+
+            if (welcome && welcome.classList.contains('active')) {
+                welcome.style.maxHeight = welcome.offsetHeight + 'px';
+                welcome.style.transition = 'all 0.8s ease-in-out';
+                setTimeout(() => {
+                    welcome.style.maxHeight = '0';
+                    welcome.style.opacity = '0';
+                    welcome.style.marginTop = '-2rem';
+                    if (content) content.classList.add('-translate-y-20', 'opacity-0');
+                    if (btnDemo) btnDemo.classList.add('opacity-0');
+                    if (btnCont) btnCont.classList.add('opacity-0');
+                    if (!isFloating) btnNew.classList.add('opacity-0');
+                }, 10);
+            }
+
+            if (isFloating) {
+                btnNew.classList.add('-translate-y-20', 'opacity-0');
+            }
 
             setTimeout(() => {
                 localStorage.setItem('focusquest_welcome_seen', 'true');
                 state = JSON.parse(JSON.stringify(DEFAULT_STATE));
                 localStorage.setItem('focusquest_v2', JSON.stringify(state));
-                if (btnNew.parentElement === document.body) btnNew.remove();
+                if (isFloating) btnNew.remove();
                 renderAll();
                 switchTab('hero');
                 window.location.hash = 'hero';
