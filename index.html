@@ -1707,10 +1707,14 @@
                             const match = l.message.match(/\((\d+)m\)/);
                             return sum + (match ? parseInt(match[1]) : 0);
                         }, 0);
-                        const gold = taskLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                        
+                        // Беремо чисте золото з масиву earnings (rate * time), а не з логів (де воно з бонусами)
+                        const gold = state.earnings
+                            .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && taskLogs.some(l => Math.abs(l.date - e.date) < 2000))
+                            .reduce((sum, e) => sum + e.amount, 0);
                         
                         if (timeMins > 0 || gold > 0) {
-                            rows.push({ proj: p.name, task: tk.title, time: timeMins, gold: gold });
+                            rows.push({ proj: p.name, task: tk.title, time: timeMins, gold: Math.round(gold) });
                             totalTime += timeMins;
                             totalGold += gold;
                         }
@@ -1723,10 +1727,14 @@
                                 const match = l.message.match(/\((\d+)m\)/);
                                 return sum + (match ? parseInt(match[1]) : 0);
                             }, 0);
-                            const gold = stLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                            
+                            // Беремо чисте золото з масиву earnings
+                            const gold = state.earnings
+                                .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && stLogs.some(l => Math.abs(l.date - e.date) < 2000))
+                                .reduce((sum, e) => sum + e.amount, 0);
                             
                             if (timeMins > 0 || gold > 0) {
-                                rows.push({ proj: p.name, task: `${tk.title} > ${st.title}`, time: timeMins, gold: gold });
+                                rows.push({ proj: p.name, task: `${tk.title} > ${st.title}`, time: timeMins, gold: Math.round(gold) });
                                 totalTime += timeMins;
                                 totalGold += gold;
                             }
@@ -1758,18 +1766,28 @@
                 p.tasks.forEach(tk => {
                     const taskLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(tk.title));
                     const timeM = taskLogs.reduce((sum, l) => { const match = l.message.match(/\((\d+)m\)/); return sum + (match ? parseInt(match[1]) : 0); }, 0);
-                    const gold = taskLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                    
+                    // Чисте золото з масиву earnings
+                    const gold = state.earnings
+                        .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && taskLogs.some(l => Math.abs(l.date - e.date) < 2000))
+                        .reduce((sum, e) => sum + e.amount, 0);
+
                     if (timeM > 0 || gold > 0) {
-                        csv += `"${p.name}","${tk.title}",${timeM},${gold}\n`;
-                        totalT += timeM; totalG += gold;
+                        csv += `"${p.name}","${tk.title}",${timeM},${Math.round(gold)}\n`;
+                        totalT += timeM; totalG += Math.round(gold);
                     }
                     (tk.subtasks || []).forEach(st => {
                         const stLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(st.title));
                         const stTimeM = stLogs.reduce((sum, l) => { const match = l.message.match(/\((\d+)m\)/); return sum + (match ? parseInt(match[1]) : 0); }, 0);
-                        const stGold = stLogs.reduce((sum, l) => sum + (l.gold || 0), 0);
+                        
+                        // Чисте золото з масиву earnings
+                        const stGold = state.earnings
+                            .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && stLogs.some(l => Math.abs(l.date - e.date) < 2000))
+                            .reduce((sum, e) => sum + e.amount, 0);
+
                         if (stTimeM > 0 || stGold > 0) {
-                            csv += `"${p.name}","${tk.title} > ${st.title}",${stTimeM},${stGold}\n`;
-                            totalT += stTimeM; totalG += stGold;
+                            csv += `"${p.name}","${tk.title} > ${st.title}",${stTimeM},${Math.round(stGold)}\n`;
+                            totalT += stTimeM; totalG += Math.round(stGold);
                         }
                     });
                 });
@@ -2151,9 +2169,10 @@
             if (ds <= 0) { showMessage(t('attention'), t('err_time'), "fa-clock", "text-yellow-500"); return; }
             const pr = state.projects.find(p => p.id === pid); let tn = "";
             if (stid) { const st = pr.tasks.find(t => t.id === tid).subtasks.find(s => s.id === stid); st.timeSpent += ds; tn = st.title; } else { const tk = pr.tasks.find(t => t.id === tid); tk.timeSpent += ds; tn = tk.title; }
-            const er = (ds / 3600) * pr.rate;
-            let eg = getGoldAmount(er + (ds / 60)); // Applying rogue bonus to time-based gold
-            if (er > 0) state.earnings.push({ date: Date.now(), amount: er, projectId: pr.id }); state.user.gold += eg;
+            const er = (ds / 3600) * pr.rate; // Чистий заробіток для звіту (rate * time)
+            let eg = getGoldAmount(er + (ds / 60)); // Ігрове золото (бонуси класів + 1 за хвилину)
+            if (er > 0) state.earnings.push({ date: Date.now(), amount: er, projectId: pr.id }); 
+            state.user.gold += eg;
             sfx.coin(); addLog(`${t('time_added')}: ${tn} (${Math.floor(ds / 60)}m)`, Math.floor(ds / 60), 'gold', Math.floor(eg));
             if (ds >= 3600 && !state.achievements.includes('zen_master')) unlockAch('zen_master');
             checkAchievements(); closeManualTimeModal(); renderAll();
@@ -2234,9 +2253,10 @@
             if (state.activeSession.type === 'task') { p.tasks.find(t => t.id === state.activeSession.id).timeSpent += ds; } else { p.tasks.find(t => t.id === state.activeSession.parentTaskId).subtasks.find(s => s.id === state.activeSession.id).timeSpent += ds; }
 
             if (ds >= 60) {
-                const er = (ds / 3600) * p.rate;
-                let eg = getGoldAmount(er + (ds / 60)); // Applying rogue bonus
-                if (er > 0) state.earnings.push({ date: Date.now(), amount: er, projectId: p.id }); state.user.gold += eg;
+                const er = (ds / 3600) * p.rate; // Чистий заробіток для звіту
+                let eg = getGoldAmount(er + (ds / 60)); // Ігрове золото з бонусами
+                if (er > 0) state.earnings.push({ date: Date.now(), amount: er, projectId: p.id }); 
+                state.user.gold += eg;
                 sfx.coin(); addLog(`${t('focus_finished')}: ${state.activeSession.name} (${Math.floor(ds / 60)}m)`, Math.floor(ds / 60), 'gold', Math.floor(eg));
             }
 
