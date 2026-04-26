@@ -16,6 +16,7 @@
 3. **i18n (Internationalization)**: The app supports Ukrainian (uk) and English (en). Always update the `translations` object in `index.html` when adding or modifying text. Use the `data-i18n` and `data-i18n-title` attributes in HTML.
 4. **Vanilla JavaScript**: Prefer modern Vanilla JS over external libraries for core logic.
 5. **State Management**: The app uses a global `state` object persisted in `localStorage` and synced with Firebase. Always use `saveData()` and `renderAll()` after state mutations.
+    - `state.workLog`: Stores precise work sessions `{ date, projectId, taskId, subtaskId, duration, amount }` for accounting and reports.
 6. **Mobile First**: Ensure the UI remains responsive and usable on small screens (max-width 7xl layout).
 
 ## Development Workflow

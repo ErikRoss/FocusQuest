@@ -9,7 +9,7 @@
     - `mage`: +15% XP bonus.
     - `rogue`: +20% Gold bonus.
 - **Currencies**: Gold (🪙) and XP.
-- **Reporting**: `renderReport()` filters `state.logs` and `state.projects` based on datetime range.
+- **Reporting**: `renderReport()` and `exportFilteredCSV()` process `state.workLog` to calculate pure financial earnings (rate * time), separate from RPG gold bonuses logged in `state.logs`.
 
 ## UI Components
 - **Tabbed Navigation**: 3-tab layout (Hero, Adventures, Stats) managed by `switchTab(tabId)`.
@@ -26,10 +26,11 @@
 - **Stats Tab**:
     - Dashboard with 6 counters.
     - Pure CSS Bar Charts for 7-day productivity/profitability.
-    - Advanced Report with 3-column control layout:
-        1. Project & Quick Filters (Today, Yesterday, Week).
-        2. Start & End Datetimes (stacked).
-        3. Generate & Export buttons (stacked).
+    - Advanced Report with control layout:
+        1. Project (Multi-select) & Quick Filters (Today, Yesterday, Week, Month, Year).
+        2. Start & End Datetimes.
+        3. Generate & Export actions.
+        4. Report table includes a Date column.
 - **Navigation State**: Active tab is persisted in `localStorage` under `focusquest_active_tab`.
 
 ## External Integrations

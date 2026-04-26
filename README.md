@@ -10,7 +10,8 @@
 * ⏱️ **Анти-відволікаючий таймер:** Трекайте час для кожної задачі чи підзадачі. Зупинили таймер раніше ніж за 5 хвилин? Отримайте штраф (шкоду) за відволікання\! Можливість вносити час вручну та скасовувати випадкові сесії.  
 * 🎯 **Оцінка часу (Estimates):** Встановлюйте очікуваний час для задач. Вкладаєтесь у дедлайн? Отримуйте "Критичний удар" із подвійним досвідом та золотом\!  
 * 🏆 **Досягнення (Achievements):** Виконуйте специфічні умови (наприклад, фокус понад годину без перерв), щоб розблокувати унікальні бейджі та отримати цінні нагороди.  
-* 💰 **Економіка та Крамниця:** Встановлюйте погодинну ставку (rate) для проєктів, рахуйте реальний прибуток. Витрачайте ігрове золото на Зілля Здоров'я чи Фокусу.  
+* 💰 **Економіка та Крамниця:** Встановлюйте погодинну ставку (rate) для проєктів, рахуйте точний реальний прибуток (відділений від ігрових бонусів) у детальних звітах. Витрачайте ігрове золото на Зілля Здоров'я чи Фокусу.
+  
 * 🐉 **Битви з Босами:** Перетворіть складний проєкт на "Боса" з власною смугою здоров'я, яка зменшується з кожним виконаним кроком.  
 * ☁️ **Google Авторизація та Хмара:** Входьте в один клік через Google. Ваш прогрес безпечно синхронізується між усіма пристроями через Firebase. Конфлікти синхронізації між локальними даними та хмарою вирішуються зручним діалоговим вікном.  
 * 📱 **PWA та Мультимедіа:** Встановлюйте як нативний додаток на телефон. Насолоджуйтесь 8-бітними звуками, фоновими патернами та темною/світлою темами.
@@ -83,7 +84,8 @@ Turn your daily routine into an epic RPG adventure where you are the main hero, 
 * ⏱️ **Anti-distraction Timer:** Track time for each quest or subtask. Stopped the timer in under 5 minutes? Take damage (HP penalty) for getting distracted\! Support for manual time entry and discarding accidental sessions.  
 * 🎯 **Time Estimates:** Set estimated times for your tasks. Beat the deadline? Land a "Critical Hit" for double XP and extra gold\!  
 * 🏆 **Achievements:** Complete specific challenges (e.g., focus for 60+ mins without a break) to unlock unique badges and claim valuable rewards.  
-* 💰 **Economy & Guild Shop:** Set an hourly rate for projects to track real-world earnings. Spend your in-game gold on Health or Focus Potions.  
+* 💰 **Economy & Guild Shop:** Set an hourly rate for projects to track exact real-world earnings (separated from in-game bonuses) in detailed reports. Spend your in-game gold on Health or Focus Potions.
+  
 * 🐉 **Boss Battles:** Turn a complex project into a "Boss" with its own health bar that depletes as you complete its tasks.  
 * ☁️ **Google Auth & Cloud Sync:** Log in with one click via Google. Your progress securely syncs across all your devices via Firebase. Smart conflict resolution popups are included.  
 * 📱 **PWA & Multimedia:** Install it as a native app on your phone. Enjoy 8-bit sound effects, seamless background patterns, and Dark/Light themes.
