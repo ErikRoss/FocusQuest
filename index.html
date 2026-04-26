@@ -1750,8 +1750,8 @@
                 groups[key].amount += wl.amount;
             });
 
-            // Sort by date (descending)
-            const sortedGroups = Object.values(groups).sort((a, b) => b.rawDate - a.rawDate);
+            // Sort by date (ascending)
+            const sortedGroups = Object.values(groups).sort((a, b) => a.rawDate - b.rawDate);
 
             sortedGroups.forEach(g => {
                 const p = state.projects.find(pr => pr.id === g.projectId);
@@ -1814,7 +1814,7 @@
                 groups[key].amount += wl.amount;
             });
 
-            const sortedGroups = Object.values(groups).sort((a, b) => b.rawDate - a.rawDate);
+            const sortedGroups = Object.values(groups).sort((a, b) => a.rawDate - b.rawDate);
 
             sortedGroups.forEach(g => {
                 const p = state.projects.find(pr => pr.id === g.projectId);
