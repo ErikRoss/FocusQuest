@@ -569,14 +569,17 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-[9px] uppercase font-bold text-slate-500 mb-1" data-i18n="filter_project">Project</label>
-                            <select id="report-filter-project" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
-                                <option value="all" data-i18n="all_projects">All Projects</option>
+                            <select id="report-filter-project" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 min-h-[80px]">
+                                <option value="all" selected data-i18n="all_projects">All Projects</option>
                             </select>
+                            <p class="text-[8px] text-slate-500 mt-1">Ctrl + Click to select multiple</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <button onclick="setQuickRange('today')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[9px] text-slate-400 font-bold transition" data-i18n="today">Today</button>
                             <button onclick="setQuickRange('yesterday')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[9px] text-slate-400 font-bold transition" data-i18n="yesterday">Вчора</button>
                             <button onclick="setQuickRange('week')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[9px] text-slate-400 font-bold transition" data-i18n="week">Week</button>
+                            <button onclick="setQuickRange('month')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[9px] text-slate-400 font-bold transition" data-i18n="month">Month</button>
+                            <button onclick="setQuickRange('year')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[9px] text-slate-400 font-bold transition" data-i18n="year">Year</button>
                         </div>
                     </div>
 
@@ -603,6 +606,7 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="text-slate-500 border-b border-slate-800">
+                                <th class="pb-2 font-bold uppercase tracking-wider" data-i18n="date">Date</th>
                                 <th class="pb-2 font-bold uppercase tracking-wider" data-i18n="project">Project</th>
                                 <th class="pb-2 font-bold uppercase tracking-wider" data-i18n="task">Task</th>
                                 <th class="pb-2 font-bold uppercase tracking-wider text-right" data-i18n="time">Time</th>
@@ -610,11 +614,11 @@
                             </tr>
                         </thead>
                         <tbody id="report-table-body" class="text-slate-300">
-                            <tr><td colspan="4" class="py-8 text-center text-slate-600 italic" data-i18n="silence">Silence...</td></tr>
+                            <tr><td colspan="5" class="py-8 text-center text-slate-600 italic" data-i18n="silence">Silence...</td></tr>
                         </tbody>
                         <tfoot>
                             <tr class="border-t border-slate-700 font-bold text-white">
-                                <td colspan="2" class="pt-2 uppercase tracking-wider" data-i18n="total">Total</td>
+                                <td colspan="3" class="pt-2 uppercase tracking-wider" data-i18n="total">Total</td>
                                 <td id="report-total-time" class="pt-2 text-right">0m</td>
                                 <td id="report-total-gold" class="pt-2 text-right">🪙 0</td>
                             </tr>
@@ -1143,6 +1147,7 @@
                 stats_total_xp: "Всього XP", stats_total_gold: "Всього Золота", stats_total_time: "Всього Часу", stats_quests_done: "Завершено Квестів", stats_bosses_slain: "Подолано Босів", stats_potions_drunk: "Випито Зілля",
                 stats_7days_title: "Останні 7 днів", filter_project: "Проєкт", filter_start: "Початок", filter_end: "Кінець", all_projects: "Всі проєкти", generate_report: "Згенерувати звіт", export_filtered: "Експорт фільтрованого",
                 stats_profitability: "Прибутковість", stats_productivity: "Продуктивність",
+                month: "Місяць", year: "Рік", date: "Дата"
             },
             en: {
                 offline: "Local Save", syncing: "Syncing...", synced: "Synced", new_profile: "New Profile", cloud_error: "Cloud Error", no_network: "Offline Mode", saved: "Saved", hero_name: "Focus Hero", health: "Health", experience: "Experience", gold: "Gold", xp_multiplier: "XP Multiplier", guild_shop: "Guild Shop", health_potion: "Health Potion", health_potion_desc: "+30 HP. Cures procrastination.", focus_potion: "Focus Potion", focus_potion_desc: "Double XP for 30 min.", inventory: "Your Inventory", real_earnings: "Real Earnings", today: "Today", week: "Week", total: "Total", adventure_log: "Adventure Log", active_quests: "Active Quests", your_worlds: "Your Worlds", active: "Active", completed: "Completed", new_world: "+ New World", empty_active: "No active projects. Start your journey!", empty_completed: "Archive is empty.", create_world_title: "Create New World", project_name: "Project Name", hourly_rate: "Hourly Rate (🪙/hr)", boss_battle: "Boss Battle?", boss_desc: "Project gets an HP bar.", cancel: "Cancel", create: "Create", add: "Add", save: "Save", got_it: "Got it", new_quest: "New Quest", what_to_do: "What needs to be done?", new_subtask: "New Step (Subtask)", what_exactly: "What exactly to do?", manual_time: "Enter Time", hours: "Hours", minutes: "Minutes", attention: "Attention", stop_penalty: "Stop under 5m: -10 HP", stop: "Stop", task: "Task", project: "Project", boss_hp: "Boss HP", rate: "Rate", time: "Time", quest: "Quest", restore: "Restore", err_time: "Please enter correct time.", err_gold: "Not enough gold!", silence: "Silence...", edit_title: "Edit", tasks: "Quests", active_only: "Active", all: "All", focus_finished: "Focus", save_changes: "Save", time_added: "Time added", delete: "Delete", confirm_delete: "Confirm Deletion", delete_project_msg: "Delete this world and all its quests?", delete_task_msg: "Delete this quest?", delete_subtask_msg: "Delete this step?", toggle_lang: "Change language", toggle_theme: "Toggle Dark/Light Mode", toggle_sound: "Toggle Sounds", cloud_status_tt: "Data sync status", view_active: "Show active worlds", view_completed: "Show completed worlds", add_project: "Create a new world (Project)", streak_tt: "Your daily focus streak. Grants XP bonus!", level_tt: "Your current level", hp_bar_tt: "Your health. Drops when you procrastinate", xp_bar_tt: "Your experience towards next level", gold_tt: "Current gold balance", multiplier_tt: "XP Bonus from streak and potions", timer_display_tt: "Focus time", earnings_today: "Earned today", earnings_week: "Earned this week", earnings_total: "Total earnings", shop_health: "Buy Health Potion", shop_focus: "Buy Focus Potion", use_health: "Drink potion (restores HP)", use_focus: "Drink potion (doubles XP)", cancel_action: "Cancel action", confirm_action: "Confirm", collapse: "Collapse / Expand", complete_project: "Complete world and move to archive", restore_project: "Restore world from archive", delete_project: "Delete this world", add_quest: "Add a new quest to this world", show_active_tasks: "Show only uncompleted quests", show_all_tasks: "Show all quests", drag_handle: "Drag to reorder", mark_done: "Mark as done / undone", edit: "Edit", manual_time_btn: "Log time manually", start_timer: "Start focus", stop_timer: "Stop focus", add_subtask: "Add subtask (step)", delete_task: "Delete this quest", delete_subtask: "Delete this step", export_csv: "Report", yesterday: "Yesterday",
@@ -1158,6 +1163,7 @@
                 stats_total_xp: "Total XP", stats_total_gold: "Total Gold", stats_total_time: "Total Time", stats_quests_done: "Quests Completed", stats_bosses_slain: "Bosses Defeated", stats_potions_drunk: "Potions Used",
                 stats_7days_title: "Last 7 Days", filter_project: "Project", filter_start: "Start", filter_end: "End", all_projects: "All Projects", generate_report: "Generate Report", export_filtered: "Export Filtered",
                 stats_profitability: "Profitability", stats_productivity: "Productivity",
+                month: "Month", year: "Year", date: "Date"
             }
         };
 
@@ -1194,7 +1200,7 @@
         let db = null, docRef = null, auth = null, currentUser = null;
         const isCloudEnabled = firebaseConfig.apiKey !== "ВАШ_API_KEY" && firebaseConfig.apiKey !== "";
 
-        const DEFAULT_STATE = { user: { level: 1, xp: 0, hp: 100, gold: 0, streak: 1, lastLogin: Date.now() }, inventory: { health: 0, focus: 0 }, activeBuff: null, projects: [], logs: [], earnings: [], activeSession: null, achievements: [], stats: { quests: 0, bosses: 0, potions: 0 }, lastUpdate: Date.now() };
+        const DEFAULT_STATE = { user: { level: 1, xp: 0, hp: 100, gold: 0, streak: 1, lastLogin: Date.now() }, inventory: { health: 0, focus: 0 }, activeBuff: null, projects: [], logs: [], earnings: [], workLog: [], activeSession: null, achievements: [], stats: { quests: 0, bosses: 0, potions: 0 }, lastUpdate: Date.now() };
 
         let state;
         try {
@@ -1426,6 +1432,42 @@
             state.achievements = state.achievements || []; state.stats = state.stats || { quests: 0, bosses: 0, potions: 0 };
             state.projects.forEach(p => p.tasks.forEach(t => { t.estimatedTime = t.estimatedTime || 0; (t.subtasks || []).forEach(st => st.estimatedTime = st.estimatedTime || 0); }));
             state.user.heroClass = state.user.heroClass || 'novice';
+            
+            if (!state.workLog) {
+                state.workLog = [];
+                // Migration: attempt to reconstruct work sessions from logs and earnings
+                if (state.logs && state.earnings) {
+                    const allTargets = [];
+                    state.projects.forEach(p => {
+                        p.tasks.forEach(tk => {
+                            allTargets.push({ pid: p.id, tid: tk.id, stid: null, title: tk.title });
+                            (tk.subtasks || []).forEach(st => {
+                                allTargets.push({ pid: p.id, tid: tk.id, stid: st.id, title: st.title });
+                            });
+                        });
+                    });
+
+                    state.logs.forEach(l => {
+                        const match = l.message.match(/\((\d+)m\)/);
+                        if (match) {
+                            const mins = parseInt(match[1]);
+                            const target = allTargets.find(t => l.message.includes(t.title));
+                            if (target) {
+                                // Find closest earnings entry
+                                const earn = state.earnings.find(e => e.projectId === target.pid && Math.abs(e.date - l.date) < 5000);
+                                state.workLog.push({
+                                    date: l.date,
+                                    projectId: target.pid,
+                                    taskId: target.tid,
+                                    subtaskId: target.stid,
+                                    duration: mins * 60,
+                                    amount: earn ? earn.amount : 0
+                                });
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         function checkStreak() {
@@ -1638,27 +1680,18 @@
             document.getElementById('total-potions-val').innerText = state.stats.potions || 0;
 
             // Chart Data Aggregation (last 7 days)
-            const days = [], prodData = [], profitData = [], labels = [];
+            const labels = [], prodData = [], profitData = [];
             for (let i = 6; i >= 0; i--) {
                 const d = new Date(); d.setDate(d.getDate() - i);
                 const dStr = d.toDateString();
-                days.push(dStr);
                 labels.push(d.toLocaleDateString([], { weekday: 'short' }));
                 
-                const dayEarnings = state.earnings.filter(e => new Date(e.date).toDateString() === dStr).reduce((sum, e) => sum + e.amount, 0);
+                const dayLogs = state.workLog.filter(wl => new Date(wl.date).toDateString() === dStr);
+                const dayEarnings = dayLogs.reduce((sum, wl) => sum + (wl.amount || 0), 0);
+                const dayDurationSec = dayLogs.reduce((sum, wl) => sum + (wl.duration || 0), 0);
+                
                 profitData.push(dayEarnings);
-
-                // For productivity, we need logs of type 'gold' or 'info' that have focus time, 
-                // but currently we don't store time per day in a simple array.
-                // We'll use logs as a proxy or simply show earnings if rate is set.
-                // Let's use the 'earnings' as a base for productivity if rate > 0, 
-                // and for now, we'll just use a mock-up calculation based on logs if needed.
-                // BETTER: iterate all earnings and logs to find time per day.
-                const dayTimeSec = state.logs.filter(l => new Date(l.date).toDateString() === dStr && l.message.includes('(')).reduce((sum, l) => {
-                    const match = l.message.match(/\((\d+)m\)/);
-                    return sum + (match ? parseInt(match[1]) * 60 : 0);
-                }, 0);
-                prodData.push(dayTimeSec / 3600);
+                prodData.push(dayDurationSec / 3600);
             }
 
             // Render Productivity Chart
@@ -1671,11 +1704,16 @@
             document.getElementById('chart-profitability').innerHTML = profitData.map((v, i) => `<div class="chart-bar" style="height: ${(v / maxProfit) * 100}%" data-value="🪙${Math.floor(v)}"></div>`).join('');
             document.getElementById('chart-labels-gold').innerHTML = labels.map(l => `<span class="chart-label">${l}</span>`).join('');
 
-            // Update project filter dropdown
+            // Update project filter dropdown (Multi-select)
             const projSelect = document.getElementById('report-filter-project');
-            const currentVal = projSelect.value;
+            const selectedValues = Array.from(projSelect.selectedOptions).map(opt => opt.value);
             projSelect.innerHTML = `<option value="all">${t('all_projects')}</option>` + state.projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-            projSelect.value = currentVal;
+            
+            // Restore selection
+            Array.from(projSelect.options).forEach(opt => {
+                if (selectedValues.includes(opt.value)) opt.selected = true;
+            });
+            if (projSelect.selectedOptions.length === 0) projSelect.options[0].selected = true;
 
             // Set default dates if empty
             if (!document.getElementById('report-filter-start').value) {
@@ -1689,111 +1727,115 @@
         }
 
         function renderReport() {
-            const pid = document.getElementById('report-filter-project').value;
+            const projSelect = document.getElementById('report-filter-project');
+            const selectedPids = Array.from(projSelect.selectedOptions).map(opt => opt.value);
+            const isAll = selectedPids.includes('all');
             const start = new Date(document.getElementById('report-filter-start').value).getTime() || 0;
             const end = new Date(document.getElementById('report-filter-end').value).getTime() || Infinity;
 
             const tbody = document.getElementById('report-table-body');
-            let totalTime = 0, totalGold = 0, rows = [];
+            let totalTimeSec = 0, totalGold = 0, rows = [];
 
-            state.projects.forEach(p => {
-                if (pid !== 'all' && p.id !== pid) return;
+            // Group workLog by Date, project/task/subtask
+            const filteredLogs = state.workLog.filter(wl => wl.date >= start && wl.date <= end && (isAll || selectedPids.includes(wl.projectId)));
+            
+            const groups = {};
+            filteredLogs.forEach(wl => {
+                const dStr = new Date(wl.date).toLocaleDateString();
+                const key = `${dStr}|${wl.projectId}|${wl.taskId}|${wl.subtaskId}`;
+                if (!groups[key]) {
+                    groups[key] = { date: dStr, projectId: wl.projectId, taskId: wl.taskId, subtaskId: wl.subtaskId, duration: 0, amount: 0, rawDate: wl.date };
+                }
+                groups[key].duration += wl.duration;
+                groups[key].amount += wl.amount;
+            });
+
+            // Sort by date (descending)
+            const sortedGroups = Object.values(groups).sort((a, b) => b.rawDate - a.rawDate);
+
+            sortedGroups.forEach(g => {
+                const p = state.projects.find(pr => pr.id === g.projectId);
+                if (!p) return;
+                const tk = p.tasks.find(t => t.id === g.taskId);
+                if (!tk) return;
                 
-                p.tasks.forEach(tk => {
-                    // Check logs for this task/subtask in range
-                    const taskLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(tk.title));
-                    if (taskLogs.length > 0) {
-                        const timeMins = taskLogs.reduce((sum, l) => {
-                            const match = l.message.match(/\((\d+)m\)/);
-                            return sum + (match ? parseInt(match[1]) : 0);
-                        }, 0);
-                        
-                        // Беремо чисте золото з масиву earnings (rate * time), а не з логів (де воно з бонусами)
-                        const gold = state.earnings
-                            .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && taskLogs.some(l => Math.abs(l.date - e.date) < 2000))
-                            .reduce((sum, e) => sum + e.amount, 0);
-                        
-                        if (timeMins > 0 || gold > 0) {
-                            rows.push({ proj: p.name, task: tk.title, time: timeMins, gold: Math.round(gold) });
-                            totalTime += timeMins;
-                            totalGold += gold;
-                        }
-                    }
+                let taskTitle = tk.title;
+                if (g.subtaskId) {
+                    const st = tk.subtasks.find(s => s.id === g.subtaskId);
+                    if (st) taskTitle += ` > ${st.title}`;
+                    else taskTitle += ` > [${t('deleted')}]`;
+                }
 
-                    (tk.subtasks || []).forEach(st => {
-                        const stLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(st.title));
-                        if (stLogs.length > 0) {
-                            const timeMins = stLogs.reduce((sum, l) => {
-                                const match = l.message.match(/\((\d+)m\)/);
-                                return sum + (match ? parseInt(match[1]) : 0);
-                            }, 0);
-                            
-                            // Беремо чисте золото з масиву earnings
-                            const gold = state.earnings
-                                .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && stLogs.some(l => Math.abs(l.date - e.date) < 2000))
-                                .reduce((sum, e) => sum + e.amount, 0);
-                            
-                            if (timeMins > 0 || gold > 0) {
-                                rows.push({ proj: p.name, task: `${tk.title} > ${st.title}`, time: timeMins, gold: Math.round(gold) });
-                                totalTime += timeMins;
-                                totalGold += gold;
-                            }
-                        }
-                    });
+                rows.push({
+                    date: g.date,
+                    proj: p.name,
+                    task: taskTitle,
+                    time: Math.floor(g.duration / 60),
+                    gold: Math.round(g.amount)
                 });
+                totalTimeSec += g.duration;
+                totalGold += g.amount;
             });
 
             if (rows.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-600 italic">${t('silence')}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-600 italic">${t('silence')}</td></tr>`;
             } else {
-                tbody.innerHTML = rows.map(r => `<tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition"><td class="py-2 pr-2">${r.proj}</td><td class="py-2 pr-2 text-slate-400">${r.task}</td><td class="py-2 text-right font-mono">${r.time}m</td><td class="py-2 text-right font-mono text-yellow-500">🪙 ${r.gold}</td></tr>`).join('');
+                tbody.innerHTML = rows.map(r => `
+                    <tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition text-[10px] sm:text-xs">
+                        <td class="py-2 pr-2 text-slate-500 font-mono">${r.date}</td>
+                        <td class="py-2 pr-2 font-medium">${r.proj}</td>
+                        <td class="py-2 pr-2 text-slate-400">${r.task}</td>
+                        <td class="py-2 text-right font-mono">${r.time}m</td>
+                        <td class="py-2 text-right font-mono text-yellow-500">🪙 ${r.gold}</td>
+                    </tr>`).join('');
             }
 
-            document.getElementById('report-total-time').innerText = `${totalTime}m`;
-            document.getElementById('report-total-gold').innerText = `🪙 ${totalGold}`;
+            document.getElementById('report-total-time').innerText = `${Math.floor(totalTimeSec / 60)}m`;
+            document.getElementById('report-total-gold').innerText = `🪙 ${Math.round(totalGold)}`;
         }
 
         function exportFilteredCSV() {
-            const pid = document.getElementById('report-filter-project').value;
+            const projSelect = document.getElementById('report-filter-project');
+            const selectedPids = Array.from(projSelect.selectedOptions).map(opt => opt.value);
+            const isAll = selectedPids.includes('all');
             const start = new Date(document.getElementById('report-filter-start').value).getTime() || 0;
             const end = new Date(document.getElementById('report-filter-end').value).getTime() || Infinity;
 
-            let csv = "\uFEFFProject,Task,Time(Minutes),Gold\n";
+            let csv = "\uFEFFDate,Project,Task,Time(Minutes),Gold\n";
             let totalT = 0, totalG = 0;
 
-            state.projects.forEach(p => {
-                if (pid !== 'all' && p.id !== pid) return;
-                p.tasks.forEach(tk => {
-                    const taskLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(tk.title));
-                    const timeM = taskLogs.reduce((sum, l) => { const match = l.message.match(/\((\d+)m\)/); return sum + (match ? parseInt(match[1]) : 0); }, 0);
-                    
-                    // Чисте золото з масиву earnings
-                    const gold = state.earnings
-                        .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && taskLogs.some(l => Math.abs(l.date - e.date) < 2000))
-                        .reduce((sum, e) => sum + e.amount, 0);
-
-                    if (timeM > 0 || gold > 0) {
-                        csv += `"${p.name}","${tk.title}",${timeM},${Math.round(gold)}\n`;
-                        totalT += timeM; totalG += Math.round(gold);
-                    }
-                    (tk.subtasks || []).forEach(st => {
-                        const stLogs = state.logs.filter(l => l.date >= start && l.date <= end && l.message.includes(st.title));
-                        const stTimeM = stLogs.reduce((sum, l) => { const match = l.message.match(/\((\d+)m\)/); return sum + (match ? parseInt(match[1]) : 0); }, 0);
-                        
-                        // Чисте золото з масиву earnings
-                        const stGold = state.earnings
-                            .filter(e => e.projectId === p.id && e.date >= start && e.date <= end && stLogs.some(l => Math.abs(l.date - e.date) < 2000))
-                            .reduce((sum, e) => sum + e.amount, 0);
-
-                        if (stTimeM > 0 || stGold > 0) {
-                            csv += `"${p.name}","${tk.title} > ${st.title}",${stTimeM},${Math.round(stGold)}\n`;
-                            totalT += stTimeM; totalG += Math.round(stGold);
-                        }
-                    });
-                });
+            const filteredLogs = state.workLog.filter(wl => wl.date >= start && wl.date <= end && (isAll || selectedPids.includes(wl.projectId)));
+            const groups = {};
+            filteredLogs.forEach(wl => {
+                const dStr = new Date(wl.date).toLocaleDateString();
+                const key = `${dStr}|${wl.projectId}|${wl.taskId}|${wl.subtaskId}`;
+                if (!groups[key]) groups[key] = { date: dStr, projectId: wl.projectId, taskId: wl.taskId, subtaskId: wl.subtaskId, duration: 0, amount: 0, rawDate: wl.date };
+                groups[key].duration += wl.duration;
+                groups[key].amount += wl.amount;
             });
 
-            csv += `\nTOTAL,,,Time(Mins),Gold\n,,,${totalT},${totalG}\n`;
+            const sortedGroups = Object.values(groups).sort((a, b) => b.rawDate - a.rawDate);
+
+            sortedGroups.forEach(g => {
+                const p = state.projects.find(pr => pr.id === g.projectId);
+                if (!p) return;
+                const tk = p.tasks.find(t => t.id === g.taskId);
+                if (!tk) return;
+                
+                let taskTitle = tk.title;
+                if (g.subtaskId) {
+                    const st = tk.subtasks.find(s => s.id === g.subtaskId);
+                    if (st) taskTitle += ` > ${st.title}`;
+                    else taskTitle += ` > [${t('deleted')}]`;
+                }
+
+                const timeM = Math.floor(g.duration / 60);
+                const gold = Math.round(g.amount);
+                csv += `"${g.date}","${p.name}","${taskTitle}",${timeM},${gold}\n`;
+                totalT += timeM; totalG += gold;
+            });
+
+            csv += `\nTOTAL,,,,Time(Mins),Gold\n,,,,${totalT},${totalG}\n`;
             
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -1874,6 +1916,12 @@
                 return;
             } else if (range === 'week') {
                 const d = new Date(); d.setDate(d.getDate() - 7); d.setHours(0,0,0,0);
+                start = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            } else if (range === 'month') {
+                const d = new Date(); d.setDate(1); d.setHours(0,0,0,0);
+                start = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            } else if (range === 'year') {
+                const d = new Date(); d.setMonth(0, 1); d.setHours(0,0,0,0);
                 start = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
             }
 
@@ -2171,7 +2219,11 @@
             if (stid) { const st = pr.tasks.find(t => t.id === tid).subtasks.find(s => s.id === stid); st.timeSpent += ds; tn = st.title; } else { const tk = pr.tasks.find(t => t.id === tid); tk.timeSpent += ds; tn = tk.title; }
             const er = (ds / 3600) * pr.rate; // Чистий заробіток для звіту (rate * time)
             let eg = getGoldAmount(er + (ds / 60)); // Ігрове золото (бонуси класів + 1 за хвилину)
-            if (er > 0) state.earnings.push({ date: Date.now(), amount: er, projectId: pr.id }); 
+            
+            const timestamp = Date.now();
+            if (er > 0) state.earnings.push({ date: timestamp, amount: er, projectId: pr.id });
+            state.workLog.push({ date: timestamp, projectId: pid, taskId: tid, subtaskId: stid || null, duration: ds, amount: er });
+            
             state.user.gold += eg;
             sfx.coin(); addLog(`${t('time_added')}: ${tn} (${Math.floor(ds / 60)}m)`, Math.floor(ds / 60), 'gold', Math.floor(eg));
             if (ds >= 3600 && !state.achievements.includes('zen_master')) unlockAch('zen_master');
@@ -2255,7 +2307,18 @@
             if (ds >= 60) {
                 const er = (ds / 3600) * p.rate; // Чистий заробіток для звіту
                 let eg = getGoldAmount(er + (ds / 60)); // Ігрове золото з бонусами
-                if (er > 0) state.earnings.push({ date: Date.now(), amount: er, projectId: p.id }); 
+                
+                const timestamp = Date.now();
+                if (er > 0) state.earnings.push({ date: timestamp, amount: er, projectId: p.id });
+                state.workLog.push({
+                    date: timestamp,
+                    projectId: p.id,
+                    taskId: state.activeSession.type === 'task' ? state.activeSession.id : state.activeSession.parentTaskId,
+                    subtaskId: state.activeSession.type === 'subtask' ? state.activeSession.id : null,
+                    duration: ds,
+                    amount: er
+                });
+
                 state.user.gold += eg;
                 sfx.coin(); addLog(`${t('focus_finished')}: ${state.activeSession.name} (${Math.floor(ds / 60)}m)`, Math.floor(ds / 60), 'gold', Math.floor(eg));
             }
